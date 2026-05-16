@@ -72,7 +72,8 @@ export class AuthService {
   }
 
   navigatePostLogin(role: string): void {
-    if (role === 'ROLE_PLATFORM_ADMIN') {
+    const normalizedRole = role.toUpperCase().replace(/^"|"$/g, '').trim();
+    if (normalizedRole === 'ROLE_PLATFORM_ADMIN' || normalizedRole === 'ROLE_ADMINISTRATOR') {
       void this.router.navigate(['/portal/dashboard']);
       return;
     }

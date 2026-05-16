@@ -21,4 +21,8 @@ export const WORKSPACE_SIDEBAR_ITEMS: SidebarItem[] = [
   { icon: 'layers', title: 'Categories', route: '/workspace/categories' },
   { icon: 'refresh-cw', title: 'Stock Movements', route: '/workspace/stock' },
   { icon: 'users', title: 'Users', route: '/workspace/users' },
+
+  // Administrative tools available in workspace for authorized roles
+  { icon: 'shield', title: 'Go to Admin Console', route: '/portal/dashboard', roles: [ROLES.platformAdmin, ROLES.administrator], section: 'ADMINISTRATION' },
+  { icon: 'refresh-cw', title: 'Pending Approvals', route: '/portal/approvals', roles: [ROLES.platformAdmin, ROLES.administrator], section: 'ADMINISTRATION' },
 ];

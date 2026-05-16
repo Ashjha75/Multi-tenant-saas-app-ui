@@ -75,8 +75,7 @@
           "builder": "angular-cli-ghpages:deploy",
           "options": {
             "buildTarget": "Multi-tenant-saas-app-ui:build:github-pages",
-            "baseHref": "/Multi-tenant-saas-app-ui/",
-            "cname": false
+            "baseHref": "/Multi-tenant-saas-app-ui/"
           }
         },
         "serve": {

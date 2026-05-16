@@ -47,6 +47,22 @@
               ],
               "outputHashing": "all"
             },
+            "github-pages": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all",
+              "baseHref": "/Multi-tenant-saas-app-ui/"
+            },
             "development": {
               "optimization": false,
               "extractLicenses": false,
@@ -54,6 +70,14 @@
             }
           },
           "defaultConfiguration": "production"
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {
+            "buildTarget": "Multi-tenant-saas-app-ui:build:github-pages",
+            "baseHref": "/Multi-tenant-saas-app-ui/",
+            "cname": false
+          }
         },
         "serve": {
           "builder": "@angular/build:dev-server",

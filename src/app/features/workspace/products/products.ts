@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideAngularModule, Plus, Download, Eye, Edit, Trash2, Image as ImageIcon } from 'lucide-angular';
 import { PageHeader } from '../../../shared/components/page-header/page-header';
 import { Button } from '../../../shared/components/button/button';
@@ -8,17 +8,9 @@ import { Input } from '../../../shared/components/input/input';
 import { Select } from '../../../shared/components/select/select';
 import { DataTable } from '../../../shared/components/data-table/data-table';
 import { StatusBadge } from '../../../shared/components/status-badge/status-badge';
-
-interface ProductData {
-  id: string;
-  image: string;
-  name: string;
-  reference: string;
-  price: string;
-  category: string;
-  stock: number;
-  status: 'active' | 'low' | 'out';
-}
+import { ProductService } from '../../../core/services/product.service';
+import { NotificationService } from '../../../core/services/notification.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-products',
@@ -26,8 +18,10 @@ interface ProductData {
   imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, PageHeader, Button, Input, Select, DataTable, StatusBadge],
   templateUrl: './products.html'
 })
-export class Products {
+export class Products implements OnInit {
   private readonly fb = inject(FormBuilder);
+  private readonly productService = inject(ProductService);
+  private readonly notifier = inject(NotificationService);
 
   readonly Plus = Plus;
   readonly Download = Download;
@@ -37,6 +31,7 @@ export class Products {
   readonly ImageIcon = ImageIcon;
 
   showModal = false;
+  isLoading = false;
 
   columns = [
     { key: 'image', label: 'Image' },
@@ -49,11 +44,7 @@ export class Products {
     { key: 'actions', label: 'Actions' }
   ];
 
-  data: ProductData[] = [
-    { id: '1', image: '', name: 'Dell XPS 15', reference: 'REF-001', price: '$1,299.00', category: 'Electronics', stock: 45, status: 'active' },
-    { id: '2', image: '', name: 'Logitech MX Master 3', reference: 'REF-092', price: '$99.00', category: 'Accessories', stock: 3, status: 'low' },
-    { id: '3', image: '', name: 'Ergonomic Office Chair', reference: 'REF-114', price: '$249.00', category: 'Furniture', stock: 0, status: 'out' }
-  ];
+  data: any[] = [];
 
   categoryOptions = [
     { value: 'all', label: 'All Categories' },
@@ -70,14 +61,30 @@ export class Products {
   });
 
   productForm = this.fb.group({
-    name: [''],
-    reference: [''],
+    name: ['', Validators.required],
+    reference: ['', Validators.required],
     description: [''],
-    price: [''],
+    price: ['', [Validators.required, Validators.min(0)]],
     alertThreshold: [''],
-    category: [''],
+    categoryId: ['', Validators.required],
     image: ['']
   });
+
+  ngOnInit() {
+    this.loadProducts();
+  }
+
+  loadProducts() {
+    this.isLoading = true;
+    this.productService.getProducts().pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
+      next: (res) => {
+        this.data = res.content || res || [];
+      },
+      error: () => this.notifier.error('Failed to load products')
+    });
+  }
 
   openModal() {
     this.productForm.reset();
@@ -89,7 +96,41 @@ export class Products {
   }
 
   saveProduct() {
-    // Save logic
-    this.showModal = false;
+    if (this.productForm.invalid) {
+      this.productForm.markAllAsTouched();
+      this.notifier.error('Please fill required fields correctly');
+      return;
+    }
+
+    const payload = this.productForm.value;
+    this.isLoading = true;
+
+    this.productService.createProduct(payload).pipe(
+      finalize(() => {
+        this.isLoading = false;
+        this.closeModal();
+      })
+    ).subscribe({
+      next: () => {
+        this.notifier.success('Product created successfully');
+        this.loadProducts();
+      },
+      error: () => this.notifier.error('Failed to create product')
+    });
+  }
+
+  deleteProduct(id: string) {
+    if (!confirm('Are you sure you want to delete this product?')) return;
+    
+    this.isLoading = true;
+    this.productService.deleteProduct(id).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
+      next: () => {
+        this.notifier.success('Product deleted');
+        this.loadProducts();
+      },
+      error: () => this.notifier.error('Failed to delete product')
+    });
   }
 }

@@ -1,19 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { finalize } from 'rxjs';
 import { AuthService } from '../../../core/auth/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
-import { Button } from '../../../shared/components/button/button';
 import { Input } from '../../../shared/components/input/input';
-import { PageHeader } from '../../../shared/components/page-header/page-header';
-import { Select } from '../../../shared/components/select/select';
-import { StatusBadge } from '../../../shared/components/status-badge/status-badge';
+import { LucideAngularModule, Building2, User, Mail, Lock, CheckCircle2, ArrowRight } from 'lucide-angular';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, ReactiveFormsModule, PageHeader, Input, Select, StatusBadge],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, Input, LucideAngularModule],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
@@ -23,106 +21,55 @@ export class Register {
   private readonly notifier = inject(NotificationService);
   private readonly router = inject(Router);
 
-  readonly step = signal(1);
   readonly loading = signal(false);
+  
+  // Icons
+  readonly Building2 = Building2;
+  readonly User = User;
+  readonly Mail = Mail;
+  readonly Lock = Lock;
+  readonly CheckCircle2 = CheckCircle2;
+  readonly ArrowRight = ArrowRight;
 
-  readonly industries = [
-    { label: 'Retail', value: 'retail' },
-    { label: 'E-commerce', value: 'ecommerce' },
-    { label: 'Manufacturing', value: 'manufacturing' },
-    { label: 'Healthcare', value: 'healthcare' },
-  ];
-
-  readonly sizes = [
-    { label: '1-10', value: '1-10' },
-    { label: '11-50', value: '11-50' },
-    { label: '51-250', value: '51-250' },
-    { label: '250+', value: '250+' },
-  ];
-
-  readonly countries = [
-    { label: 'United States', value: 'us' },
-    { label: 'India', value: 'in' },
-    { label: 'United Kingdom', value: 'uk' },
-  ];
-
-  readonly companyForm = this.fb.group({
-    companyName: ['', [Validators.required]],
+  readonly registerForm = this.fb.group({
+    // Company Info
+    companyName: ['', [Validators.required, Validators.minLength(3)]],
     companyCode: ['', [Validators.required, Validators.pattern('^[a-z0-9-]+$')]],
     email: ['', [Validators.required, Validators.email]],
-    industry: ['', [Validators.required]],
-    companySize: ['', [Validators.required]],
-    country: ['', [Validators.required]],
-  });
-
-  readonly adminForm = this.fb.group({
+    
+    // Admin Info
     adminFullName: ['', [Validators.required]],
-    adminUsername: ['', [Validators.required]],
+    adminUsername: ['', [Validators.required, Validators.minLength(4)]],
     adminEmail: ['', [Validators.required, Validators.email]],
     adminPassword: [
       '',
-      [Validators.required, Validators.minLength(8), Validators.pattern('^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).+$')],
-    ],
-    confirmPassword: ['', [Validators.required]],
+      [
+        Validators.required, 
+        Validators.minLength(8),
+        Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})')
+      ],
+    ]
   });
 
-  readonly passwordsMatch = computed(
-    () => this.adminForm.value.adminPassword && this.adminForm.value.adminPassword === this.adminForm.value.confirmPassword,
-  );
-
-  next(): void {
-    if (this.step() === 1) {
-      if (this.companyForm.invalid) {
-        this.companyForm.markAllAsTouched();
-        this.notifier.error('Please complete company details.');
-        return;
-      }
-    }
-
-    if (this.step() === 2) {
-      if (this.adminForm.invalid || !this.passwordsMatch()) {
-        this.adminForm.markAllAsTouched();
-        this.notifier.error('Please complete valid admin details.');
-        return;
-      }
-    }
-
-    this.step.update((value) => Math.min(4, value + 1));
-    if (this.step() === 4) {
-      this.submit();
-    }
-  }
-
-  back(): void {
-    this.step.update((value) => Math.max(1, value - 1));
-  }
-
   submit(): void {
-    const payload = {
-      companyName: this.companyForm.value.companyName ?? '',
-      companyCode: this.companyForm.value.companyCode ?? '',
-      email: this.companyForm.value.email ?? '',
-      industry: this.companyForm.value.industry ?? '',
-      companySize: this.companyForm.value.companySize ?? '',
-      country: this.companyForm.value.country ?? '',
-      adminFullName: this.adminForm.value.adminFullName ?? '',
-      adminEmail: this.adminForm.value.adminEmail ?? '',
-      adminUsername: this.adminForm.value.adminUsername ?? '',
-      adminPassword: this.adminForm.value.adminPassword ?? '',
-    };
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      this.notifier.error('Please fix the errors in the form.');
+      return;
+    }
 
     this.loading.set(true);
     this.authService
-      .registerTenant(payload)
+      .registerTenant(this.registerForm.getRawValue())
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
         next: () => {
           this.notifier.success('Tenant registration submitted successfully.');
           void this.router.navigate(['/approval-status']);
         },
-        error: () => {
-          this.notifier.error('Registration failed. Please try again.');
-          this.step.set(3);
+        error: (err) => {
+          const msg = err.error?.message || 'Registration failed. Please try again.';
+          this.notifier.error(msg);
         },
       });
   }

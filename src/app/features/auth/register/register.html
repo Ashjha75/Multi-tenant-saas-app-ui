@@ -1,79 +1,132 @@
-<app-page-header title="Register Tenant" subtitle="Create your organization workspace in four simple steps."></app-page-header>
-
-<section class="rounded-card border border-slate-200 bg-white p-6 shadow-xl">
-  <div class="mb-6 flex items-center justify-between border-b border-slate-100 pb-4">
-    <p class="text-sm font-medium text-slate-500">Step {{ step() }} of 4</p>
-    <app-status-badge status="pending"></app-status-badge>
-  </div>
-
-  @if (step() === 1) {
-    <div class="space-y-6">
-      <h2 class="font-heading text-xl text-slate-900">Company Information</h2>
-      <form class="grid grid-cols-1 gap-6 md:grid-cols-2" [formGroup]="companyForm">
-        <app-input label="Company Name" formControlName="companyName" [error]="companyForm.controls.companyName.touched && companyForm.controls.companyName.invalid ? 'Required' : ''"></app-input>
-        <app-input label="Company Code" formControlName="companyCode" [error]="companyForm.controls.companyCode.touched && companyForm.controls.companyCode.invalid ? 'Use lowercase letters, numbers, hyphen only' : ''"></app-input>
-        <app-input label="Company Email" formControlName="email" [error]="companyForm.controls.email.touched && companyForm.controls.email.invalid ? 'Valid email required' : ''"></app-input>
-        <app-select label="Industry" formControlName="industry" [options]="industries" [error]="companyForm.controls.industry.touched && companyForm.controls.industry.invalid ? 'Select industry' : ''"></app-select>
-        <app-select label="Company Size" formControlName="companySize" [options]="sizes" [error]="companyForm.controls.companySize.touched && companyForm.controls.companySize.invalid ? 'Select size' : ''"></app-select>
-        <app-select label="Country" formControlName="country" [options]="countries" [error]="companyForm.controls.country.touched && companyForm.controls.country.invalid ? 'Select country' : ''"></app-select>
-      </form>
-    </div>
-  }
-
-  @if (step() === 2) {
-    <div class="space-y-6">
-      <h2 class="font-heading text-xl text-slate-900">Admin Setup</h2>
-      <form class="grid grid-cols-1 gap-6 md:grid-cols-2" [formGroup]="adminForm">
-        <app-input label="Full Name" formControlName="adminFullName" [error]="adminForm.controls.adminFullName.touched && adminForm.controls.adminFullName.invalid ? 'Required' : ''"></app-input>
-        <app-input label="Username" formControlName="adminUsername" [error]="adminForm.controls.adminUsername.touched && adminForm.controls.adminUsername.invalid ? 'Required' : ''"></app-input>
-        <app-input label="Admin Email" formControlName="adminEmail" [error]="adminForm.controls.adminEmail.touched && adminForm.controls.adminEmail.invalid ? 'Valid email required' : ''"></app-input>
-        <app-input label="Password" type="password" formControlName="adminPassword" [error]="adminForm.controls.adminPassword.touched && adminForm.controls.adminPassword.invalid ? '8+, uppercase, number, special character required' : ''"></app-input>
-        <app-input label="Confirm Password" type="password" formControlName="confirmPassword" [error]="adminForm.controls.confirmPassword.touched && !passwordsMatch() ? 'Passwords do not match' : ''"></app-input>
-      </form>
-    </div>
-  }
-
-  @if (step() === 3) {
-    <div class="space-y-6">
-      <h2 class="font-heading text-xl text-slate-900">Review</h2>
-      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <article class="rounded-card border border-slate-200 bg-slate-50 p-6">
-          <h3 class="font-heading text-lg text-slate-900">Company Summary</h3>
-          <p class="mt-2 text-sm font-medium text-slate-700">{{ companyForm.value.companyName }}</p>
-          <p class="text-sm text-slate-500">{{ companyForm.value.companyCode }}</p>
-          <p class="text-sm text-slate-500">{{ companyForm.value.email }}</p>
-        </article>
-        <article class="rounded-card border border-slate-200 bg-slate-50 p-6">
-          <h3 class="font-heading text-lg text-slate-900">Admin Summary</h3>
-          <p class="mt-2 text-sm font-medium text-slate-700">{{ adminForm.value.adminFullName }}</p>
-          <p class="text-sm text-slate-500">{{ adminForm.value.adminUsername }}</p>
-          <p class="text-sm text-slate-500">{{ adminForm.value.adminEmail }}</p>
-        </article>
+<div class="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-4xl">
+    <div class="flex justify-center mb-6">
+      <div class="h-16 w-16 bg-primary rounded-[20px] flex items-center justify-center shadow-lg shadow-primary/20 rotate-3 hover:rotate-0 transition-transform">
+        <lucide-icon [img]="Building2" class="h-8 w-8 text-white"></lucide-icon>
       </div>
     </div>
-  }
-
-  @if (step() === 4) {
-    <div class="space-y-6 text-center py-8">
-      <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary mb-4">
-         <svg class="animate-spin h-8 w-8 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-         </svg>
-      </div>
-      <h2 class="font-heading text-xl text-slate-900">Creating Request</h2>
-      <p class="text-sm text-slate-500">Submitting your tenant and provisioning workflow.</p>
-      <ol class="mx-auto mt-6 max-w-xs space-y-3 text-left text-sm text-slate-600">
-        <li class="flex items-center gap-2"><div class="h-2 w-2 rounded-full bg-success"></div> 1. Submitted</li>
-        <li class="flex items-center gap-2"><div class="h-2 w-2 rounded-full bg-primary/50 animate-pulse"></div> 2. Review</li>
-        <li class="flex items-center gap-2"><div class="h-2 w-2 rounded-full bg-slate-300"></div> 3. Provisioning</li>
-        <li class="flex items-center gap-2"><div class="h-2 w-2 rounded-full bg-slate-300"></div> 4. Ready</li>
-      </ol>
-    </div>
-  }
-
-  <div class="mt-8 flex justify-between pt-6 border-t border-slate-100">
-    <button class="rounded-button px-6 py-2 font-semibold text-slate-600 transition hover:bg-slate-100 disabled:opacity-50" (click)="back()" [disabled]="step() === 1 || loading()">Back</button>
-    <button class="rounded-button bg-primary px-6 py-2 font-semibold text-white shadow-sm transition hover:bg-primaryHover disabled:opacity-50" (click)="next()" [disabled]="loading() || step() === 4">{{ step() === 3 ? 'Submit' : 'Next' }}</button>
+    <h2 class="text-center text-3xl font-black text-slate-900 tracking-tight">Create your Workspace</h2>
+    <p class="mt-2 text-center text-sm text-slate-500 font-medium">
+      Launch your multi-tenant platform in minutes.
+    </p>
   </div>
-</section>
+
+  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-4xl">
+    <div class="bg-white py-10 px-8 shadow-2xl shadow-slate-200/50 sm:rounded-[40px] border border-slate-100 relative overflow-hidden">
+      <!-- Decorator -->
+      <div class="absolute top-0 right-0 -mt-4 -mr-4 h-32 w-32 bg-primary/5 rounded-full blur-3xl"></div>
+      
+      <form class="space-y-10" [formGroup]="registerForm" (ngSubmit)="submit()">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+          
+          <!-- Company Details Section -->
+          <div class="space-y-8">
+            <div class="flex items-center gap-3 pb-2 border-b border-slate-50">
+              <div class="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                <lucide-icon [img]="Building2" class="h-4 w-4"></lucide-icon>
+              </div>
+              <h3 class="text-lg font-bold text-slate-900 uppercase tracking-wider text-sm">Company Information</h3>
+            </div>
+            
+            <app-input 
+              label="Company Name *" 
+              formControlName="companyName" 
+              placeholder="e.g. Acme Corporation"
+              [error]="registerForm.get('companyName')?.touched && registerForm.get('companyName')?.errors?.['required'] ? 'Company name is required' : ''"
+            ></app-input>
+
+            <app-input 
+              label="Workspace URL Code *" 
+              formControlName="companyCode" 
+              placeholder="e.g. acme-corp"
+              hint="Lowercase, numbers, and hyphens only (e.g. yourcompany.app)"
+              [error]="registerForm.get('companyCode')?.touched && registerForm.get('companyCode')?.errors ? 'Invalid URL code format' : ''"
+            ></app-input>
+
+            <app-input 
+              label="Company Email *" 
+              type="email"
+              formControlName="email" 
+              placeholder="contact@acme.com"
+              [error]="registerForm.get('email')?.touched && registerForm.get('email')?.errors ? 'Valid email required' : ''"
+            ></app-input>
+          </div>
+
+          <!-- Admin Details Section -->
+          <div class="space-y-8">
+            <div class="flex items-center gap-3 pb-2 border-b border-slate-50">
+              <div class="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                <lucide-icon [img]="User" class="h-4 w-4"></lucide-icon>
+              </div>
+              <h3 class="text-lg font-bold text-slate-900 uppercase tracking-wider text-sm">Administrator Details</h3>
+            </div>
+
+            <app-input 
+              label="Full Name *" 
+              formControlName="adminFullName" 
+              placeholder="e.g. John Doe"
+              [error]="registerForm.get('adminFullName')?.touched && registerForm.get('adminFullName')?.errors ? 'Name is required' : ''"
+            ></app-input>
+
+            <app-input 
+              label="Admin Username *" 
+              formControlName="adminUsername" 
+              placeholder="e.g. admin"
+              [error]="registerForm.get('adminUsername')?.touched && registerForm.get('adminUsername')?.errors ? 'Username required (min 4 chars)' : ''"
+            ></app-input>
+
+            <app-input 
+              label="Admin Email *" 
+              type="email"
+              formControlName="adminEmail" 
+              placeholder="admin@acme.com"
+              [error]="registerForm.get('adminEmail')?.touched && registerForm.get('adminEmail')?.errors ? 'Valid admin email required' : ''"
+            ></app-input>
+
+            <app-input 
+              label="Secure Password *" 
+              type="password"
+              formControlName="adminPassword" 
+              placeholder="••••••••"
+              hint="Must be 8+ chars with Uppercase, Number, and Symbol"
+              [error]="registerForm.get('adminPassword')?.touched && registerForm.get('adminPassword')?.errors ? 'Password does not meet complexity requirements' : ''"
+            ></app-input>
+          </div>
+        </div>
+
+        <div class="pt-10 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div class="flex items-center gap-3 text-slate-400">
+            <lucide-icon [img]="CheckCircle2" class="h-5 w-5 text-primary"></lucide-icon>
+            <span class="text-sm font-medium">By registering, you agree to our Terms of Service.</span>
+          </div>
+
+          <div class="flex items-center gap-4 w-full sm:w-auto">
+            <a routerLink="/login" class="text-sm font-bold text-slate-500 hover:text-primary transition-colors px-4 py-2">
+              Back to Login
+            </a>
+            <button 
+              type="submit"
+              [disabled]="loading()"
+              class="flex-1 sm:flex-none flex items-center justify-center gap-3 rounded-2xl bg-primary px-10 py-4 text-sm font-black text-white shadow-xl shadow-primary/20 hover:bg-primaryHover hover:scale-[1.02] active:scale-[0.95] disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            >
+              @if (loading()) {
+                <div class="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                Registering...
+              } @else {
+                Create Workspace <lucide-icon [img]="ArrowRight" class="h-5 w-5"></lucide-icon>
+              }
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="mt-8 text-center">
+      <p class="text-sm text-slate-400">
+        Already have a workspace? 
+        <a routerLink="/login" class="font-bold text-primary hover:underline">Sign in here</a>
+      </p>
+    </div>
+  </div>
+</div>

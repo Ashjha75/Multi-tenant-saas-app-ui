@@ -1,26 +1,41 @@
 <div class="space-y-2">
   @if (label()) {
-    <label class="text-sm font-medium text-slate-700" [attr.for]="id()">
+    <label class="text-sm font-bold text-slate-700" [attr.for]="id()">
       {{ label() }}
       @if (required()) {
         <span class="text-danger">*</span>
       }
     </label>
   }
-  <input
-    class="flex h-12 w-full rounded-input border border-slate-300 bg-white px-4 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:bg-slate-100 disabled:opacity-50 transition-colors shadow-sm"
-    [class.border-danger]="!!error()"
-    [attr.id]="id()"
-    [type]="type()"
-    [placeholder]="placeholder()"
-    [value]="value"
-    [required]="required()"
-    [disabled]="isDisabled"
-    (input)="onInput($event)"
-    (blur)="onBlur()"
-  />
+  
+  <div class="relative group">
+    <input
+      class="flex h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-primary focus:bg-white focus:outline-none focus:ring-4 focus:ring-primary/10 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:opacity-50 transition-all shadow-sm"
+      [class.border-danger]="!!error()"
+      [class.pr-12]="type() === 'password'"
+      [attr.id]="id()"
+      [type]="type() === 'password' ? (showPassword() ? 'text' : 'password') : type()"
+      [placeholder]="placeholder()"
+      [value]="value"
+      [required]="required()"
+      [disabled]="isDisabled"
+      (input)="onInput($event)"
+      (blur)="onBlur()"
+    />
+    
+    @if (type() === 'password') {
+      <button 
+        type="button"
+        (click)="togglePassword()"
+        class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary transition-colors focus:outline-none"
+      >
+        <lucide-icon [img]="showPassword() ? EyeOff : Eye" class="h-5 w-5"></lucide-icon>
+      </button>
+    }
+  </div>
+
   @if (error()) {
-    <p class="text-xs text-danger">{{ error() }}</p>
+    <p class="text-xs text-danger font-medium">{{ error() }}</p>
   } @else if (hint()) {
     <p class="text-xs text-slate-400">{{ hint() }}</p>
   }

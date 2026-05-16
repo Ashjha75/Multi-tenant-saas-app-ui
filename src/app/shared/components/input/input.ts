@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, forwardRef, input } from '@angular/core';
+import { Component, forwardRef, input, signal } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { LucideAngularModule, Eye, EyeOff } from 'lucide-angular';
 
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './input.html',
   styleUrl: './input.css',
   providers: [
@@ -19,11 +20,15 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class Input implements ControlValueAccessor {
   readonly label = input('');
   readonly id = input('');
-  readonly type = input('text');
+  readonly type = input<'text' | 'password' | 'email' | 'number'>('text');
   readonly placeholder = input('');
   readonly hint = input('');
   readonly error = input('');
   readonly required = input(false);
+
+  readonly Eye = Eye;
+  readonly EyeOff = EyeOff;
+  readonly showPassword = signal(false);
 
   value = '';
   isDisabled = false;
@@ -55,5 +60,9 @@ export class Input implements ControlValueAccessor {
 
   onBlur(): void {
     this.onTouched();
+  }
+
+  togglePassword(): void {
+    this.showPassword.update((s) => !s);
   }
 }

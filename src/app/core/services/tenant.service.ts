@@ -12,6 +12,10 @@ export class TenantService {
     return this.http.get<any>(`${this.baseUrl}?page=${page}&size=${size}`);
   }
 
+  getPendingTenants(page = 0, size = 10) {
+    return this.http.get<any>(`${this.baseUrl}/pending?page=${page}&size=${size}`);
+  }
+
   approveTenant(id: string) {
     return this.http.post<any>(`${this.baseUrl}/${id}/approve`, {});
   }

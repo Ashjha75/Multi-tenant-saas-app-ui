@@ -3,28 +3,28 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
-export class StockService {
-  private readonly baseUrl = `${environment.apiUrl}/stock-mvts`;
+export class CategoryService {
+  private readonly baseUrl = `${environment.apiUrl}/categories`;
 
   constructor(private readonly http: HttpClient) {}
 
-  getMovements(page = 0, size = 10) {
+  getCategories(page = 0, size = 10) {
     return this.http.get<any>(`${this.baseUrl}?page=${page}&size=${size}`);
   }
 
-  getMovementById(id: string) {
+  getCategoryById(id: string) {
     return this.http.get<any>(`${this.baseUrl}/${id}`);
   }
 
-  createMovement(data: any) {
+  createCategory(data: any) {
     return this.http.post<any>(this.baseUrl, data);
   }
 
-  updateMovement(id: string, data: any) {
+  updateCategory(id: string, data: any) {
     return this.http.put<any>(`${this.baseUrl}/${id}`, data);
   }
 
-  deleteMovement(id: string) {
+  deleteCategory(id: string) {
     return this.http.delete<any>(`${this.baseUrl}/${id}`);
   }
 }

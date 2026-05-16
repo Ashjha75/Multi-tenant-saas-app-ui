@@ -36,6 +36,9 @@ export class Categories implements OnInit {
 
   showModal = false;
   isLoading = false;
+  selectedCategoryId: string | null = null;
+  modalTitle = 'Create Category';
+  modalAction = 'Save Category';
 
   readonly icons = [
     { name: 'Smartphone', img: Smartphone },
@@ -60,6 +63,11 @@ export class Categories implements OnInit {
     this.loadCategories();
   }
 
+  getIcon(iconName: string) {
+    const icon = this.icons.find(i => i.name === iconName);
+    return icon ? icon.img : Package;
+  }
+
   loadCategories() {
     this.isLoading = true;
     this.categoryService.getCategories().pipe(
@@ -73,12 +81,28 @@ export class Categories implements OnInit {
   }
 
   openModal() {
+    this.selectedCategoryId = null;
+    this.modalTitle = 'Create Category';
+    this.modalAction = 'Save Category';
     this.categoryForm.reset({ icon: 'Smartphone' });
+    this.showModal = true;
+  }
+
+  editCategory(category: any) {
+    this.selectedCategoryId = category.id;
+    this.modalTitle = 'Edit Category';
+    this.modalAction = 'Update Category';
+    this.categoryForm.patchValue({
+      name: category.name,
+      description: category.description,
+      icon: category.icon || 'Smartphone'
+    });
     this.showModal = true;
   }
 
   closeModal() {
     this.showModal = false;
+    this.selectedCategoryId = null;
   }
 
   saveCategory() {
@@ -91,18 +115,33 @@ export class Categories implements OnInit {
     const payload = this.categoryForm.value;
     this.isLoading = true;
 
-    this.categoryService.createCategory(payload).pipe(
-      finalize(() => {
-        this.isLoading = false;
-        this.closeModal();
-      })
-    ).subscribe({
-      next: () => {
-        this.notifier.success('Category created successfully');
-        this.loadCategories();
-      },
-      error: () => this.notifier.error('Failed to create category')
-    });
+    if (this.selectedCategoryId) {
+      this.categoryService.updateCategory(this.selectedCategoryId, payload).pipe(
+        finalize(() => {
+          this.isLoading = false;
+          this.closeModal();
+        })
+      ).subscribe({
+        next: () => {
+          this.notifier.success('Category updated successfully');
+          this.loadCategories();
+        },
+        error: () => this.notifier.error('Failed to update category')
+      });
+    } else {
+      this.categoryService.createCategory(payload).pipe(
+        finalize(() => {
+          this.isLoading = false;
+          this.closeModal();
+        })
+      ).subscribe({
+        next: () => {
+          this.notifier.success('Category created successfully');
+          this.loadCategories();
+        },
+        error: () => this.notifier.error('Failed to create category')
+      });
+    }
   }
 
   deleteCategory(id: string) {

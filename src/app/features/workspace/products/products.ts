@@ -32,6 +32,9 @@ export class Products implements OnInit {
 
   showModal = false;
   isLoading = false;
+  selectedProductId: string | null = null;
+  modalTitle = 'Add Product';
+  modalAction = 'Save Product';
 
   columns = [
     { key: 'image', label: 'Image' },
@@ -87,12 +90,32 @@ export class Products implements OnInit {
   }
 
   openModal() {
+    this.selectedProductId = null;
+    this.modalTitle = 'Add Product';
+    this.modalAction = 'Save Product';
     this.productForm.reset();
+    this.showModal = true;
+  }
+
+  editProduct(product: any) {
+    this.selectedProductId = product.id;
+    this.modalTitle = 'Edit Product';
+    this.modalAction = 'Update Product';
+    this.productForm.patchValue({
+      name: product.name,
+      reference: product.reference,
+      description: product.description,
+      price: product.price,
+      alertThreshold: product.alertThreshold,
+      categoryId: product.categoryId || product.category?.id,
+      image: product.image
+    });
     this.showModal = true;
   }
 
   closeModal() {
     this.showModal = false;
+    this.selectedProductId = null;
   }
 
   saveProduct() {
@@ -105,18 +128,33 @@ export class Products implements OnInit {
     const payload = this.productForm.value;
     this.isLoading = true;
 
-    this.productService.createProduct(payload).pipe(
-      finalize(() => {
-        this.isLoading = false;
-        this.closeModal();
-      })
-    ).subscribe({
-      next: () => {
-        this.notifier.success('Product created successfully');
-        this.loadProducts();
-      },
-      error: () => this.notifier.error('Failed to create product')
-    });
+    if (this.selectedProductId) {
+      this.productService.updateProduct(this.selectedProductId, payload).pipe(
+        finalize(() => {
+          this.isLoading = false;
+          this.closeModal();
+        })
+      ).subscribe({
+        next: () => {
+          this.notifier.success('Product updated successfully');
+          this.loadProducts();
+        },
+        error: () => this.notifier.error('Failed to update product')
+      });
+    } else {
+      this.productService.createProduct(payload).pipe(
+        finalize(() => {
+          this.isLoading = false;
+          this.closeModal();
+        })
+      ).subscribe({
+        next: () => {
+          this.notifier.success('Product created successfully');
+          this.loadProducts();
+        },
+        error: () => this.notifier.error('Failed to create product')
+      });
+    }
   }
 
   deleteProduct(id: string) {

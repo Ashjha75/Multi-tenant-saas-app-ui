@@ -56,63 +56,63 @@
               <th class="px-4 py-3">Type</th>
               <th class="px-4 py-3">Qty</th>
               <th class="px-4 py-3">User</th>
+              <th class="px-4 py-3">Comment</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100">
             @for (row of movements; track row.id) {
               <tr class="hover:bg-slate-50 transition-colors">
-                <td class="px-4 py-3 whitespace-nowrap">{{ row.date }}</td>
-                <td class="px-4 py-3 font-medium text-slate-900">{{ row.product }}</td>
-                <td class="px-4 py-3">
-                  @if (row.type === 'IN') {
-                    <span class="inline-flex items-center gap-1.5 rounded-full bg-success/10 px-2.5 py-0.5 text-xs font-medium text-success">
+                <td class="px-4 py-4">{{ row.dateMvt }}</td>
+                <td class="px-4 py-4 font-medium text-slate-900">{{ row.product?.name || row.productId }}</td>
+                <td class="px-4 py-4">
+                  @if (row.typeMvt === 'IN') {
+                    <span class="inline-flex items-center gap-1 rounded-full bg-success/10 px-2.5 py-0.5 text-xs font-medium text-success">
                       <lucide-icon [img]="ArrowDownCircle" class="h-3 w-3"></lucide-icon> IN
                     </span>
                   } @else {
-                    <span class="inline-flex items-center gap-1.5 rounded-full bg-danger/10 px-2.5 py-0.5 text-xs font-medium text-danger">
+                    <span class="inline-flex items-center gap-1 rounded-full bg-warning/10 px-2.5 py-0.5 text-xs font-medium text-warning">
                       <lucide-icon [img]="ArrowUpCircle" class="h-3 w-3"></lucide-icon> OUT
                     </span>
                   }
                 </td>
-                <td class="px-4 py-3 font-bold" [class.text-success]="row.type === 'IN'" [class.text-danger]="row.type === 'OUT'">
-                  {{ row.type === 'IN' ? '+' : '-' }}{{ row.qty }}
+                <td class="px-4 py-4 font-medium" [ngClass]="row.typeMvt === 'IN' ? 'text-success' : 'text-warning'">
+                  {{ row.typeMvt === 'IN' ? '+' : '-' }}{{ row.quantity }}
                 </td>
-                <td class="px-4 py-3">{{ row.user }}</td>
+                <td class="px-4 py-4">{{ row.user || 'System' }}</td>
+                <td class="px-4 py-4 text-slate-500">{{ row.comment }}</td>
               </tr>
             }
           </tbody>
         </table>
       </div>
     } @else {
-      <div class="animate-fade-in max-w-3xl mx-auto py-6">
-        <div class="space-y-8 pl-4">
-          @for (item of movements; track item.id) {
-            <div class="relative pl-10 before:absolute before:left-4 before:top-4 before:h-full before:w-[2px] before:bg-slate-100 last:before:hidden">
-              @if (item.type === 'IN') {
-                <div class="absolute left-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-white text-success">
-                  <lucide-icon [img]="ArrowDownCircle" class="h-5 w-5"></lucide-icon>
-                </div>
-              } @else {
-                <div class="absolute left-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-white text-danger">
-                  <lucide-icon [img]="ArrowUpCircle" class="h-5 w-5"></lucide-icon>
-                </div>
-              }
-              <div class="rounded-xl border border-slate-100 bg-white p-4 shadow-sm hover:shadow-md transition-shadow">
-                <div class="flex justify-between items-start mb-2">
-                  <h4 class="font-medium text-slate-900">{{ item.product }}</h4>
-                  <span class="text-xs text-slate-400">{{ item.date }}</span>
-                </div>
-                <p class="text-sm text-slate-600 mb-3">{{ item.comment }}</p>
-                <div class="flex items-center justify-between text-xs">
-                  <span class="font-medium text-slate-500">By {{ item.user }}</span>
-                  <span class="font-bold text-sm" [class.text-success]="item.type === 'IN'" [class.text-danger]="item.type === 'OUT'">
-                    {{ item.type === 'IN' ? '+' : '-' }}{{ item.qty }} Units
-                  </span>
-                </div>
-              </div>
+      <div *ngIf="viewMode === 'timeline'" class="space-y-8 py-4 animate-fade-in">
+        @for (row of movements; track row.id) {
+          <div class="relative pl-8">
+            <div class="absolute left-0 top-1 h-full w-px bg-slate-100 last:hidden"></div>
+            <div class="absolute left-[-4px] top-1 h-2.5 w-2.5 rounded-full ring-4 ring-white" 
+                 [ngClass]="row.typeMvt === 'IN' ? 'bg-success' : 'bg-warning'"></div>
+            
+            <div class="mb-1 flex items-center gap-2 text-sm text-slate-500">
+              <lucide-icon [img]="Clock" class="h-4 w-4"></lucide-icon>
+              {{ row.dateMvt }}
             </div>
-          }
-        </div>
+            <div class="rounded-2xl border border-slate-100 bg-slate-50/50 p-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <span class="font-medium text-slate-900">{{ row.typeMvt === 'IN' ? 'Received' : 'Dispatched' }}</span>
+                  <span class="text-slate-600"> {{ row.quantity }} units of {{ row.product?.name || row.productId }}</span>
+                </div>
+                <span class="text-sm font-medium" [ngClass]="row.typeMvt === 'IN' ? 'text-success' : 'text-warning'">
+                  {{ row.typeMvt === 'IN' ? '+' : '-' }}{{ row.quantity }}
+                </span>
+              </div>
+              @if (row.comment) {
+                <p class="mt-2 text-sm text-slate-500">"{{ row.comment }}"</p>
+              }
+            </div>
+          </div>
+        }
       </div>
     }
   </div>
@@ -120,23 +120,25 @@
 
 @if (showModal) {
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm animate-fade-in">
-    <div class="w-full max-w-md rounded-[24px] bg-white shadow-2xl">
+    <div class="w-full max-w-md rounded-[24px] bg-white shadow-2xl flex flex-col">
       <div class="flex items-center justify-between border-b border-slate-100 p-6">
-        <h3 class="font-heading text-xl font-bold text-slate-900">Add Stock Movement</h3>
+        <h3 class="font-heading text-xl font-bold text-slate-900">Record Movement</h3>
         <button class="text-slate-400 hover:text-slate-600 transition-colors" (click)="closeModal()">✕</button>
       </div>
       
-      <div class="p-6 space-y-5" [formGroup]="movementForm">
-        <app-select label="Product *" formControlName="product" [options]="productOptions"></app-select>
-        
-        <div class="grid grid-cols-2 gap-4">
-          <app-select label="Type *" formControlName="type" [options]="movementOptions"></app-select>
-          <app-input label="Quantity *" type="number" formControlName="quantity" placeholder="0"></app-input>
-        </div>
-
-        <div>
-          <label class="mb-2 block text-sm font-medium text-slate-700">Comment / Reason</label>
-          <textarea formControlName="comment" rows="3" class="w-full rounded-input border border-slate-300 bg-white px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors resize-none" placeholder="e.g. New shipment PO-1024"></textarea>
+      <div class="p-6" [formGroup]="movementForm">
+        <div class="space-y-4">
+          <app-select label="Product *" formControlName="productId" [options]="productOptions"></app-select>
+          
+          <div class="grid grid-cols-2 gap-4">
+            <app-select label="Type *" formControlName="typeMvt" [options]="movementOptions"></app-select>
+            <app-input label="Quantity *" type="number" formControlName="quantity" placeholder="0"></app-input>
+          </div>
+          
+          <div>
+            <label class="mb-2 block text-sm font-medium text-slate-700">Comment / Reason</label>
+            <textarea formControlName="comment" rows="3" class="w-full rounded-input border border-slate-300 bg-white px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors resize-none" placeholder="Add optional note..."></textarea>
+          </div>
         </div>
       </div>
 

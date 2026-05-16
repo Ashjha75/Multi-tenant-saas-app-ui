@@ -1,11 +1,14 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideAngularModule, Plus, Download, List, Clock, ArrowDownCircle, ArrowUpCircle } from 'lucide-angular';
 import { PageHeader } from '../../../shared/components/page-header/page-header';
-import { Button } from '../../../shared/components/button/button';
 import { Input } from '../../../shared/components/input/input';
 import { Select } from '../../../shared/components/select/select';
+import { StockService } from '../../../core/services/stock.service';
+import { ProductService } from '../../../core/services/product.service';
+import { NotificationService } from '../../../core/services/notification.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-stock',
@@ -13,8 +16,11 @@ import { Select } from '../../../shared/components/select/select';
   imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, PageHeader, Input, Select],
   templateUrl: './stock.html'
 })
-export class Stock {
+export class Stock implements OnInit {
   private readonly fb = inject(FormBuilder);
+  private readonly stockService = inject(StockService);
+  private readonly productService = inject(ProductService);
+  private readonly notifier = inject(NotificationService);
 
   readonly Plus = Plus;
   readonly Download = Download;
@@ -25,23 +31,20 @@ export class Stock {
 
   viewMode: 'table' | 'timeline' = 'table';
   showModal = false;
+  isLoading = false;
 
   typeOptions = [
     { value: 'all', label: 'All Types' },
-    { value: 'in', label: 'Stock IN' },
-    { value: 'out', label: 'Stock OUT' }
+    { value: 'IN', label: 'Stock IN' },
+    { value: 'OUT', label: 'Stock OUT' }
   ];
 
   movementOptions = [
-    { value: 'in', label: 'Stock IN (Receive)' },
-    { value: 'out', label: 'Stock OUT (Dispatch)' }
+    { value: 'IN', label: 'Stock IN (Receive)' },
+    { value: 'OUT', label: 'Stock OUT (Dispatch)' }
   ];
 
-  productOptions = [
-    { value: 'p1', label: 'Dell XPS 15 (REF-001)' },
-    { value: 'p2', label: 'Logitech MX Master (REF-092)' },
-    { value: 'p3', label: 'Ergonomic Chair (REF-114)' }
-  ];
+  productOptions: { value: string; label: string }[] = [];
 
   filterForm = this.fb.group({
     date: [''],
@@ -51,25 +54,49 @@ export class Stock {
   });
 
   movementForm = this.fb.group({
-    product: [''],
-    type: ['in'],
-    quantity: [''],
+    productId: ['', Validators.required],
+    typeMvt: ['IN', Validators.required],
+    quantity: ['', [Validators.required, Validators.min(1)]],
     comment: ['']
   });
 
-  movements = [
-    { id: 1, date: '2026-05-16 14:30', product: 'Dell XPS 15', type: 'IN', qty: 50, user: 'Ashish Jha', comment: 'New shipment received' },
-    { id: 2, date: '2026-05-16 11:15', product: 'Logitech MX Master', type: 'OUT', qty: 2, user: 'Jane Smith', comment: 'Order #4092' },
-    { id: 3, date: '2026-05-15 09:00', product: 'Ergonomic Chair', type: 'IN', qty: 10, user: 'Warehouse Bot', comment: 'Restock' },
-    { id: 4, date: '2026-05-14 16:45', product: 'Dell XPS 15', type: 'OUT', qty: 5, user: 'Ashish Jha', comment: 'B2B bulk order' }
-  ];
+  movements: any[] = [];
+
+  ngOnInit() {
+    this.loadProducts();
+    this.loadMovements();
+  }
+
+  loadProducts() {
+    this.productService.getProducts().subscribe({
+      next: (res) => {
+        const prods = res.content || res || [];
+        this.productOptions = prods.map((p: any) => ({
+          value: p.id,
+          label: `${p.name} (${p.reference})`
+        }));
+      }
+    });
+  }
+
+  loadMovements() {
+    this.isLoading = true;
+    this.stockService.getMovements().pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
+      next: (res) => {
+        this.movements = res.content || res || [];
+      },
+      error: () => this.notifier.error('Failed to load stock movements')
+    });
+  }
 
   setView(mode: 'table' | 'timeline') {
     this.viewMode = mode;
   }
 
   openModal() {
-    this.movementForm.reset({ type: 'in' });
+    this.movementForm.reset({ typeMvt: 'IN' });
     this.showModal = true;
   }
 
@@ -78,6 +105,30 @@ export class Stock {
   }
 
   saveMovement() {
-    this.showModal = false;
+    if (this.movementForm.invalid) {
+      this.movementForm.markAllAsTouched();
+      this.notifier.error('Please fill required fields');
+      return;
+    }
+
+    const formValue = this.movementForm.value;
+    const payload = {
+      ...formValue,
+      dateMvt: new Date().toISOString().split('T')[0] // or full ISO string depending on backend
+    };
+
+    this.isLoading = true;
+    this.stockService.createMovement(payload).pipe(
+      finalize(() => {
+        this.isLoading = false;
+        this.closeModal();
+      })
+    ).subscribe({
+      next: () => {
+        this.notifier.success('Stock movement recorded');
+        this.loadMovements();
+      },
+      error: () => this.notifier.error('Failed to record movement')
+    });
   }
 }

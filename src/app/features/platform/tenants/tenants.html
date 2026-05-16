@@ -48,30 +48,27 @@
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-100">
-          @for (row of data; track row.code) {
+          @for (row of data; track row.id) {
             <tr class="hover:bg-slate-50 transition-colors">
-              <td class="px-4 py-4 font-medium text-slate-900">{{ row.company }}</td>
-              <td class="px-4 py-4">{{ row.code }}</td>
-              <td class="px-4 py-4">{{ row.admin }}</td>
-              <td class="px-4 py-4">{{ row.email }}</td>
-              <td class="px-4 py-4">{{ row.users }}</td>
-              <td class="px-4 py-4">{{ row.createdAt }}</td>
+              <td class="px-4 py-4 font-medium text-slate-900">{{ row.companyName }}</td>
+              <td class="px-4 py-4">{{ row.companyCode }}</td>
+              <td class="px-4 py-4">{{ row.adminEmail }}</td>
               <td class="px-4 py-4">
                 <app-status-badge [status]="row.status"></app-status-badge>
               </td>
               <td class="px-4 py-4">
                 <div class="flex items-center gap-2">
                   <button class="p-1 text-slate-400 hover:text-primary transition-colors" title="View"><lucide-icon [img]="Eye" class="h-4 w-4"></lucide-icon></button>
-                  @if (row.status === 'pending') {
-                    <button class="p-1 text-slate-400 hover:text-success transition-colors" title="Approve" (click)="openApproveModal()"><lucide-icon [img]="Check" class="h-4 w-4"></lucide-icon></button>
+                  @if (row.status === 'PENDING') {
+                    <button class="p-1 text-slate-400 hover:text-success transition-colors" title="Approve" (click)="openApproveModal(row.id)"><lucide-icon [img]="Check" class="h-4 w-4"></lucide-icon></button>
                   }
-                  @if (row.status === 'suspended') {
-                    <button class="p-1 text-slate-400 hover:text-primary transition-colors" title="Activate"><lucide-icon [img]="Play" class="h-4 w-4"></lucide-icon></button>
+                  @if (row.status === 'SUSPENDED' || row.status === 'DEACTIVATED') {
+                    <button class="p-1 text-slate-400 hover:text-primary transition-colors" title="Activate" (click)="activateTenant(row.id)"><lucide-icon [img]="Play" class="h-4 w-4"></lucide-icon></button>
                   }
-                  @if (row.status === 'active') {
-                    <button class="p-1 text-slate-400 hover:text-warning transition-colors" title="Suspend"><lucide-icon [img]="Pause" class="h-4 w-4"></lucide-icon></button>
+                  @if (row.status === 'ACTIVE') {
+                    <button class="p-1 text-slate-400 hover:text-warning transition-colors" title="Suspend" (click)="suspendTenant(row.id)"><lucide-icon [img]="Pause" class="h-4 w-4"></lucide-icon></button>
+                    <button class="p-1 text-slate-400 hover:text-danger transition-colors" title="Deactivate" (click)="deactivateTenant(row.id)"><lucide-icon [img]="Ban" class="h-4 w-4"></lucide-icon></button>
                   }
-                  <button class="p-1 text-slate-400 hover:text-slate-700 transition-colors" title="More options"><lucide-icon [img]="MoreVertical" class="h-4 w-4"></lucide-icon></button>
                 </div>
               </td>
             </tr>

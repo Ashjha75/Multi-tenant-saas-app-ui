@@ -1,24 +1,14 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
-import { LucideAngularModule, Plus, Download, Search, Eye, Check, Play, Pause, MoreVertical } from 'lucide-angular';
+import { LucideAngularModule, Plus, Download, Search, Eye, Check, Play, Pause, MoreVertical, Ban } from 'lucide-angular';
 import { PageHeader } from '../../../shared/components/page-header/page-header';
-import { Button } from '../../../shared/components/button/button';
 import { Input } from '../../../shared/components/input/input';
 import { Select } from '../../../shared/components/select/select';
-import { DataTable } from '../../../shared/components/data-table/data-table';
 import { StatusBadge } from '../../../shared/components/status-badge/status-badge';
-import { Modal } from '../../../shared/components/modal/modal';
-
-interface TenantData {
-  company: string;
-  code: string;
-  admin: string;
-  email: string;
-  users: number;
-  createdAt: string;
-  status: 'active' | 'pending' | 'suspended';
-}
+import { TenantService } from '../../../core/services/tenant.service';
+import { NotificationService } from '../../../core/services/notification.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-tenants',
@@ -26,8 +16,10 @@ interface TenantData {
   imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, PageHeader, Input, Select, StatusBadge],
   templateUrl: './tenants.html'
 })
-export class Tenants {
+export class Tenants implements OnInit {
   private readonly fb = inject(FormBuilder);
+  private readonly tenantService = inject(TenantService);
+  private readonly notifier = inject(NotificationService);
 
   readonly Plus = Plus;
   readonly Download = Download;
@@ -37,26 +29,22 @@ export class Tenants {
   readonly Play = Play;
   readonly Pause = Pause;
   readonly MoreVertical = MoreVertical;
+  readonly Ban = Ban;
 
   showApproveModal = false;
   isApproving = false;
+  selectedTenantId: string | null = null;
+  isLoading = false;
 
   columns = [
-    { key: 'company', label: 'Company' },
-    { key: 'code', label: 'Code' },
-    { key: 'admin', label: 'Admin' },
-    { key: 'email', label: 'Email' },
-    { key: 'users', label: 'Users' },
-    { key: 'createdAt', label: 'Created At' },
+    { key: 'companyName', label: 'Company' },
+    { key: 'companyCode', label: 'Code' },
+    { key: 'adminEmail', label: 'Email' },
     { key: 'status', label: 'Status' },
     { key: 'actions', label: 'Actions' }
   ];
 
-  data: TenantData[] = [
-    { company: 'Acme Corp', code: 'ACME', admin: 'John Doe', email: 'john@acme.com', users: 24, createdAt: '2026-05-15', status: 'active' },
-    { company: 'TechNova', code: 'TECH', admin: 'Jane Smith', email: 'jane@technova.com', users: 0, createdAt: '2026-05-16', status: 'pending' },
-    { company: 'Global Logis', code: 'GLOB', admin: 'Bob Ross', email: 'bob@global.com', users: 120, createdAt: '2026-01-10', status: 'suspended' }
-  ];
+  data: any[] = [];
 
   statusOptions = [
     { value: 'all', label: 'All Statuses' },
@@ -72,23 +60,89 @@ export class Tenants {
     companyCode: ['']
   });
 
-  constructor() {}
+  ngOnInit() {
+    this.loadTenants();
+  }
 
-  openApproveModal() {
+  loadTenants() {
+    this.isLoading = true;
+    this.tenantService.getTenants().pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
+      next: (res) => {
+        this.data = res.content || res || [];
+      },
+      error: () => this.notifier.error('Failed to load tenants')
+    });
+  }
+
+  openApproveModal(id: string) {
+    this.selectedTenantId = id;
     this.showApproveModal = true;
   }
 
   closeApproveModal() {
     if (!this.isApproving) {
       this.showApproveModal = false;
+      this.selectedTenantId = null;
     }
   }
 
   approveTenant() {
+    if (!this.selectedTenantId) return;
+    
     this.isApproving = true;
-    setTimeout(() => {
-      this.isApproving = false;
-      this.showApproveModal = false;
-    }, 2000);
+    this.tenantService.approveTenant(this.selectedTenantId).pipe(
+      finalize(() => {
+        this.isApproving = false;
+        this.closeApproveModal();
+      })
+    ).subscribe({
+      next: () => {
+        this.notifier.success('Tenant approved successfully');
+        this.loadTenants();
+      },
+      error: () => this.notifier.error('Failed to approve tenant')
+    });
+  }
+
+  activateTenant(id: string) {
+    this.isLoading = true;
+    this.tenantService.activateTenant(id).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
+      next: () => {
+        this.notifier.success('Tenant activated');
+        this.loadTenants();
+      },
+      error: () => this.notifier.error('Failed to activate tenant')
+    });
+  }
+
+  deactivateTenant(id: string) {
+    this.isLoading = true;
+    this.tenantService.deactivateTenant(id).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
+      next: () => {
+        this.notifier.success('Tenant deactivated');
+        this.loadTenants();
+      },
+      error: () => this.notifier.error('Failed to deactivate tenant')
+    });
+  }
+
+  suspendTenant(id: string) {
+    if (!confirm('Are you sure you want to suspend this tenant?')) return;
+    this.isLoading = true;
+    this.tenantService.suspendTenant(id).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
+      next: () => {
+        this.notifier.success('Tenant suspended');
+        this.loadTenants();
+      },
+      error: () => this.notifier.error('Failed to suspend tenant')
+    });
   }
 }

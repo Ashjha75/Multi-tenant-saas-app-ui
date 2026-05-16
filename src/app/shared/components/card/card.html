@@ -1,0 +1,11 @@
+<section class="app-section">
+  @if (title()) {
+    <header class="mb-4">
+      <h3 class="text-lg font-semibold text-slate-100">{{ title() }}</h3>
+      @if (subtitle()) {
+        <p class="text-sm text-slate-400">{{ subtitle() }}</p>
+      }
+    </header>
+  }
+  <ng-content></ng-content>
+</section>

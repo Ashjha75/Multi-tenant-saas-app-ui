@@ -1,0 +1,21 @@
+<aside class="hidden w-[270px] shrink-0 border-r border-border bg-surface p-5 lg:block">
+  <div class="mb-8 mt-2 flex items-center gap-2">
+    <span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-[linear-gradient(90deg,#7C3AED,#A855F7)]">S</span>
+    <div>
+      <p class="text-sm font-semibold">StockFlow</p>
+      <p class="text-xs text-slate-400">{{ mode() === 'platform' ? 'Platform Admin' : 'Workspace' }}</p>
+    </div>
+  </div>
+
+  <nav class="space-y-2">
+    @for (item of items(); track item.link) {
+      <a
+        [routerLink]="item.link"
+        routerLinkActive="bg-white/10 text-white"
+        class="block rounded-xl px-4 py-3 text-sm text-slate-300 transition hover:bg-white/5 hover:text-white"
+      >
+        {{ item.label }}
+      </a>
+    }
+  </nav>
+</aside>

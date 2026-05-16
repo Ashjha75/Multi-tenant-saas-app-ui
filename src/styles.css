@@ -1,0 +1,60 @@
+@import url(''https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap'');
+@import "tailwindcss";
+
+:root {
+  --bg: #0B1020;
+  --surface: #111827;
+  --card: #151C2F;
+  --card-hover: #1E293B;
+  --primary: #7C3AED;
+  --primary-hover: #8B5CF6;
+  --success: #10B981;
+  --danger: #EF4444;
+  --warning: #F59E0B;
+  --text: #F8FAFC;
+  --text-muted: #94A3B8;
+  --border: #273449;
+  --hero-gradient: linear-gradient(135deg, #0B1020, #141B35, #1E1B4B);
+  --button-gradient: linear-gradient(90deg, #7C3AED, #A855F7);
+  --card-gradient: linear-gradient(145deg, #151C2F, #1E293B);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 20px;
+}
+
+.app-page {
+  @apply min-h-screen bg-background text-slate-50;
+}
+
+.app-section {
+  @apply rounded-[20px] border border-border bg-card p-6 shadow-card;
+}
+
+.app-input {
+  @apply h-[52px] w-full rounded-[14px] border border-border bg-card px-4 text-slate-100 placeholder:text-slate-400 outline-none transition;
+}
+
+.app-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.2);
+}

@@ -1,0 +1,21 @@
+<header class="sticky top-0 z-40 border-b border-border/80 backdrop-blur"
+  [ngClass]="isPublic() ? 'bg-background/90' : 'bg-surface/80'">
+  <div class="mx-auto flex h-16 w-full max-w-[1280px] items-center justify-between px-4 sm:px-6 lg:px-8">
+    <a routerLink="/" class="flex items-center gap-2 text-sm font-semibold tracking-wide text-slate-100">
+      <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-[linear-gradient(90deg,#7C3AED,#A855F7)]">S</span>
+      <span>StockFlow</span>
+    </a>
+
+    @if (isPublic()) {
+      <nav class="hidden items-center gap-6 text-sm text-slate-300 md:flex">
+        <a routerLink="/features" class="hover:text-white">Features</a>
+        <a routerLink="/price" class="hover:text-white">Pricing</a>
+        <a routerLink="/about" class="hover:text-white">About</a>
+        <a routerLink="/login" class="hover:text-white">Login</a>
+        <a routerLink="/register" class="rounded-xl bg-[linear-gradient(90deg,#7C3AED,#A855F7)] px-4 py-2 font-semibold text-white">Start Free Trial</a>
+      </nav>
+    } @else {
+      <div class="text-sm text-slate-300">Multi-tenant SaaS Console</div>
+    }
+  </div>
+</header>

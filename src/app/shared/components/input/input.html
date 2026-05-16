@@ -1,0 +1,20 @@
+<div class="space-y-2">
+  @if (label()) {
+    <label class="text-sm font-medium text-slate-200" [attr.for]="id()">{{ label() }}</label>
+  }
+  <input
+    class="app-input"
+    [attr.id]="id()"
+    [type]="type()"
+    [placeholder]="placeholder()"
+    [value]="value()"
+    [required]="required()"
+    [disabled]="disabled()"
+    (input)="onInput($event)"
+  />
+  @if (error()) {
+    <p class="text-xs text-danger">{{ error() }}</p>
+  } @else if (hint()) {
+    <p class="text-xs text-slate-400">{{ hint() }}</p>
+  }
+</div>

@@ -1,0 +1,12 @@
+<section class="app-section">
+  <h3 class="mb-4 text-lg font-semibold">{{ title() }}</h3>
+  <apx-chart
+    [series]="series()"
+    [chart]="chart()"
+    [xaxis]="xaxis()"
+    [yaxis]="yaxis()"
+    [stroke]="stroke()"
+    [legend]="legend()"
+    [dataLabels]="dataLabels()"
+  ></apx-chart>
+</section>

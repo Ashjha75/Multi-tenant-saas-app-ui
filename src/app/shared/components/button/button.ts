@@ -24,10 +24,10 @@ export class Button {
   readonly buttonClass = computed(() => {
     const variantClasses: Record<ButtonVariant, string> = {
       primary:
-        'bg-[linear-gradient(90deg,#6366F1,#8B5CF6)] text-white shadow-card hover:scale-[1.02] hover:brightness-110',
-      secondary: 'glass-surface text-slate-100 hover:bg-white/10',
-      danger: 'bg-danger text-white hover:scale-[1.02] hover:brightness-110',
-      ghost: 'bg-transparent text-slate-200 hover:bg-white/10',
+        'bg-primary text-white shadow-lg shadow-primary/20 hover:bg-primaryHover hover:scale-[1.02] active:scale-[0.98]',
+      secondary: 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50',
+      danger: 'bg-danger text-white shadow-lg shadow-danger/20 hover:scale-[1.02] hover:brightness-110 active:scale-[0.98]',
+      ghost: 'bg-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900',
     };
 
     const sizeClasses: Record<ButtonSize, string> = {

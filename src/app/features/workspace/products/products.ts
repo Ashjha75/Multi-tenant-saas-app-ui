@@ -6,6 +6,7 @@ import { PageHeader } from '../../../shared/components/page-header/page-header';
 import { Input } from '../../../shared/components/input/input';
 import { Select } from '../../../shared/components/select/select';
 import { ConfirmDialog } from '../../../shared/components/confirm-dialog/confirm-dialog';
+import { Modal } from '../../../shared/components/modal/modal';
 import { ProductService } from '../../../core/services/product.service';
 import { CategoryService } from '../../../core/services/category.service';
 import { NotificationService } from '../../../core/services/notification.service';
@@ -14,7 +15,7 @@ import { finalize } from 'rxjs';
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, PageHeader, Input, Select, ConfirmDialog],
+  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, PageHeader, Input, Select, ConfirmDialog, Modal],
   templateUrl: './products.html'
 })
 export class Products implements OnInit {

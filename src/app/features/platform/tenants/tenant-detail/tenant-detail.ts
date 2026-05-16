@@ -10,7 +10,7 @@ import { DataTable } from '../../../../shared/components/data-table/data-table';
 @Component({
   selector: 'app-tenant-detail',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, PageHeader, Button, StatusBadge, KpiCard, DataTable],
+  imports: [CommonModule, LucideAngularModule, StatusBadge, KpiCard, DataTable],
   templateUrl: './tenant-detail.html'
 })
 export class TenantDetail {

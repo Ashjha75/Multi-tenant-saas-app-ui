@@ -4,19 +4,19 @@ import { PUBLIC_ENDPOINTS } from '../constants/api.constants';
 import { STORAGE_KEYS } from '../constants/storage.constants';
 import { StorageService } from '../services/storage.service';
 
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
+export const tenantInterceptor: HttpInterceptorFn = (req, next) => {
   const storage = inject(StorageService);
-  const token = storage.get<string>(STORAGE_KEYS.token);
+  const tenantId = storage.get<string>(STORAGE_KEYS.tenantId);
 
   const isPublic = PUBLIC_ENDPOINTS.some((endpoint) => req.url.includes(endpoint));
-  if (!token || isPublic || req.headers.has('Authorization')) {
+  if (!tenantId || isPublic || req.headers.has('X-Tenant-ID')) {
     return next(req);
   }
 
   return next(
     req.clone({
       setHeaders: {
-        Authorization: `Bearer ${token}`,
+        'X-Tenant-ID': tenantId,
       },
     }),
   );

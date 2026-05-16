@@ -1,6 +1,16 @@
 <div class="app-page">
   <app-navbar [isPublic]="true"></app-navbar>
-  <main class="mx-auto w-full max-w-[1280px] px-4 pb-20 pt-24 sm:px-6 lg:px-8">
+  <main class="mx-auto w-full max-w-[1280px] px-4 pb-14 pt-24 sm:px-6 lg:px-8">
     <router-outlet></router-outlet>
   </main>
+  <footer class="border-t border-border/70 bg-surface/40">
+    <div class="mx-auto flex w-full max-w-[1280px] flex-col gap-3 px-4 py-6 text-sm text-slate-400 sm:px-6 lg:px-8 md:flex-row md:items-center md:justify-between">
+      <p>© {{ 2026 }} StockFlow. Multi-tenant inventory platform.</p>
+      <div class="flex items-center gap-4">
+        <a routerLink="/about" class="hover:text-white">About</a>
+        <a routerLink="/pricing" class="hover:text-white">Pricing</a>
+        <a routerLink="/contact" class="hover:text-white">Contact</a>
+      </div>
+    </div>
+  </footer>
 </div>

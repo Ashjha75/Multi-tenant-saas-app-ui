@@ -1,26 +1,26 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideAngularModule, Plus, Download, Eye, Edit, Trash2, Image as ImageIcon } from 'lucide-angular';
 import { PageHeader } from '../../../shared/components/page-header/page-header';
-import { Button } from '../../../shared/components/button/button';
 import { Input } from '../../../shared/components/input/input';
 import { Select } from '../../../shared/components/select/select';
-import { DataTable } from '../../../shared/components/data-table/data-table';
-import { StatusBadge } from '../../../shared/components/status-badge/status-badge';
+import { ConfirmDialog } from '../../../shared/components/confirm-dialog/confirm-dialog';
 import { ProductService } from '../../../core/services/product.service';
+import { CategoryService } from '../../../core/services/category.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, PageHeader, Input, Select],
+  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, PageHeader, Input, Select, ConfirmDialog],
   templateUrl: './products.html'
 })
 export class Products implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly productService = inject(ProductService);
+  private readonly categoryService = inject(CategoryService);
   private readonly notifier = inject(NotificationService);
 
   readonly Plus = Plus;
@@ -36,6 +36,9 @@ export class Products implements OnInit {
   modalTitle = 'Add Product';
   modalAction = 'Save Product';
 
+  showConfirmDialog = false;
+  productToDelete: string | null = null;
+
   columns = [
     { key: 'image', label: 'Image' },
     { key: 'name', label: 'Name' },
@@ -47,14 +50,8 @@ export class Products implements OnInit {
     { key: 'actions', label: 'Actions' }
   ];
 
-  data: any[] = [];
-
-  categoryOptions = [
-    { value: 'all', label: 'All Categories' },
-    { value: 'electronics', label: 'Electronics' },
-    { value: 'accessories', label: 'Accessories' },
-    { value: 'furniture', label: 'Furniture' }
-  ];
+  data = signal<any[]>([]);
+  categoryOptions = signal<{ value: string; label: string }[]>([{ value: 'all', label: 'All Categories' }]);
 
   filterForm = this.fb.group({
     search: [''],
@@ -63,18 +60,61 @@ export class Products implements OnInit {
     lowStock: [false]
   });
 
+  filteredData = computed(() => {
+    const filters = this.filterForm.value;
+    return this.data().filter(item => {
+      let matches = true;
+      if (filters.search) {
+        matches = matches && item.name.toLowerCase().includes(filters.search.toLowerCase());
+      }
+      if (filters.category && filters.category !== 'all') {
+        matches = matches && (item.category?.id === filters.category || item.categoryId === filters.category);
+      }
+      if (filters.lowStock) {
+        matches = matches && (item.stock <= (item.alertThreshold || 5));
+      }
+      if (filters.priceRange) {
+        const [min, max] = filters.priceRange.split('-').map(n => Number(n.trim()));
+        if (!isNaN(min) && item.price < min) matches = false;
+        if (!isNaN(max) && item.price > max) matches = false;
+      }
+      return matches;
+    });
+  });
+
+  totalProducts = computed(() => this.data().length);
+  inventoryValue = computed(() => this.data().reduce((acc, item) => acc + (item.price * (item.stock || 0)), 0));
+  lowStockCount = computed(() => this.data().filter(item => item.stock > 0 && item.stock <= (item.alertThreshold || 5)).length);
+  outOfStockCount = computed(() => this.data().filter(item => item.stock === 0).length);
+
   productForm = this.fb.group({
     name: ['', Validators.required],
     reference: ['', Validators.required],
     description: [''],
     price: ['', [Validators.required, Validators.min(0)]],
     alertThreshold: [''],
-    categoryId: ['', Validators.required],
-    image: ['']
+    categoryId: ['', Validators.required]
   });
 
   ngOnInit() {
+    this.loadCategories();
     this.loadProducts();
+
+    this.filterForm.valueChanges.subscribe(() => {
+    });
+  }
+
+  loadCategories() {
+    this.categoryService.getCategories(0, 1000).subscribe({
+      next: (res) => {
+        const categories = res.content || res || [];
+        const options = [{ value: 'all', label: 'All Categories' }, ...categories.map((c: any) => ({
+          value: c.id,
+          label: c.name
+        }))];
+        this.categoryOptions.set(options);
+      }
+    });
   }
 
   loadProducts() {
@@ -83,7 +123,7 @@ export class Products implements OnInit {
       finalize(() => this.isLoading = false)
     ).subscribe({
       next: (res) => {
-        this.data = res.content || res || [];
+        this.data.set(res.content || res || []);
       },
       error: () => this.notifier.error('Failed to load products')
     });
@@ -107,8 +147,7 @@ export class Products implements OnInit {
       description: product.description,
       price: product.price,
       alertThreshold: product.alertThreshold,
-      categoryId: product.categoryId || product.category?.id,
-      image: product.image
+      categoryId: product.categoryId || product.category?.id
     });
     this.showModal = true;
   }
@@ -158,17 +197,31 @@ export class Products implements OnInit {
   }
 
   deleteProduct(id: string) {
-    if (!confirm('Are you sure you want to delete this product?')) return;
-    
+    this.productToDelete = id;
+    this.showConfirmDialog = true;
+  }
+
+  confirmDelete() {
+    if (!this.productToDelete) return;
+    this.showConfirmDialog = false;
     this.isLoading = true;
-    this.productService.deleteProduct(id).pipe(
+    this.productService.deleteProduct(this.productToDelete).pipe(
       finalize(() => this.isLoading = false)
     ).subscribe({
       next: () => {
         this.notifier.success('Product deleted');
+        this.productToDelete = null;
         this.loadProducts();
       },
-      error: () => this.notifier.error('Failed to delete product')
+      error: () => {
+        this.notifier.error('Failed to delete product');
+        this.productToDelete = null;
+      }
     });
+  }
+
+  cancelDelete() {
+    this.showConfirmDialog = false;
+    this.productToDelete = null;
   }
 }

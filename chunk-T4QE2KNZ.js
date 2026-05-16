@@ -1,1 +1,0 @@
-import{Pb as o,Va as t,rb as r,sb as n}from"./chunk-NSR53WHU.js";var a=class s{static \u0275fac=function(e){return new(e||s)};static \u0275cmp=t({type:s,selectors:[["app-users"]],decls:2,vars:0,template:function(e,p){e&1&&(r(0,"p"),o(1,"users works!"),n())},encapsulation:2})};export{a as Users};

@@ -1,0 +1,1 @@
+import{Rb as c,Xa as o,tb as a,ub as i}from"./chunk-JHNEAJYL.js";var n=class e{static \u0275fac=function(t){return new(t||e)};static \u0275cmp=o({type:e,selectors:[["app-product-detail"]],decls:2,vars:0,template:function(t,s){t&1&&(a(0,"div"),c(1,"Product Details coming soon"),i())},encapsulation:2})};export{n as ProductDetail};

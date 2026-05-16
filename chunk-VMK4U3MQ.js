@@ -1,1 +1,0 @@
-import{Pb as o,Va as s,rb as n,sb as i}from"./chunk-NSR53WHU.js";var a=class e{static \u0275fac=function(t){return new(t||e)};static \u0275cmp=s({type:e,selectors:[["app-settings"]],decls:2,vars:0,template:function(t,m){t&1&&(n(0,"p"),o(1,"settings works!"),i())},encapsulation:2})};export{a as Settings};

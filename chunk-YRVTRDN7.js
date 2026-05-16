@@ -1,0 +1,1 @@
+import{Rb as a,Xa as e,tb as o,ub as n}from"./chunk-JHNEAJYL.js";var s=class i{static \u0275fac=function(t){return new(t||i)};static \u0275cmp=e({type:i,selectors:[["app-notifications"]],decls:2,vars:0,template:function(t,f){t&1&&(o(0,"p"),a(1,"notifications works!"),n())},encapsulation:2})};export{s as Notifications};

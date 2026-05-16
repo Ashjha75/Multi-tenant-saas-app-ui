@@ -92,7 +92,7 @@
                 <div class="flex items-center gap-2">
                   <a [href]="'/workspace/products/' + row.id" class="p-1 text-slate-400 hover:text-primary transition-colors" title="View"><lucide-icon [img]="Eye" class="h-4 w-4"></lucide-icon></a>
                   <button class="p-1 text-slate-400 hover:text-slate-700 transition-colors" title="Edit"><lucide-icon [img]="Edit" class="h-4 w-4"></lucide-icon></button>
-                  <button class="p-1 text-slate-400 hover:text-danger transition-colors" title="Delete"><lucide-icon [img]="Trash2" class="h-4 w-4"></lucide-icon></button>
+                  <button class="p-1 text-slate-400 hover:text-danger transition-colors" title="Delete" (click)="deleteProduct(row.id)"><lucide-icon [img]="Trash2" class="h-4 w-4"></lucide-icon></button>
                 </div>
               </td>
             </tr>

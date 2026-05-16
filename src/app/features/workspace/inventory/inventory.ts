@@ -10,7 +10,7 @@ import { Select } from '../../../shared/components/select/select';
 @Component({
   selector: 'app-inventory',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, PageHeader, Button, Input, Select],
+  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, PageHeader, Input, Select],
   templateUrl: './inventory.html'
 })
 export class Inventory {

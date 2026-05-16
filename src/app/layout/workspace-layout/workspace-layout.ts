@@ -5,6 +5,7 @@ import { Sidebar } from '../../shared/components/sidebar/sidebar';
 
 @Component({
   selector: 'app-workspace-layout',
+  standalone: true,
   imports: [RouterOutlet, Navbar, Sidebar],
   templateUrl: './workspace-layout.html',
   styleUrl: './workspace-layout.css',

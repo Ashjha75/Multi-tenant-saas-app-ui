@@ -5,7 +5,7 @@ import { PLATFORM_SIDEBAR_ITEMS, WORKSPACE_SIDEBAR_ITEMS } from '../../../core/c
 import { STORAGE_KEYS } from '../../../core/constants/storage.constants';
 import { SidebarItem } from '../../../core/models/sidebar-item.model';
 import { StorageService } from '../../../core/services/storage.service';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService } from '../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-sidebar',

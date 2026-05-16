@@ -14,10 +14,6 @@ export const WORKSPACE_SIDEBAR_ITEMS: SidebarItem[] = [
   { icon: 'grid', title: 'Dashboard', route: '/workspace/dashboard' },
   { icon: 'package', title: 'Products', route: '/workspace/products' },
   { icon: 'layers', title: 'Categories', route: '/workspace/categories' },
-  { icon: 'box', title: 'Inventory', route: '/workspace/inventory' },
-  { icon: 'refresh-cw', title: 'Stock Movement', route: '/workspace/stock' },
-  { icon: 'file-text', title: 'Reports', route: '/workspace/reports' },
-  { icon: 'bell', title: 'Notifications', route: '/workspace/notifications' },
+  { icon: 'refresh-cw', title: 'Stock Movements', route: '/workspace/stock' },
   { icon: 'users', title: 'Users', route: '/workspace/users' },
-  { icon: 'settings', title: 'Settings', route: '/workspace/settings' },
 ];

@@ -24,11 +24,12 @@ export const routes: Routes = [
   {
     path: 'portal',
     canActivate: [authGuard, roleGuard],
-    data: { roles: [ROLES.platformAdmin] },
+    data: { roles: [ROLES.platformAdmin, ROLES.administrator] },
     loadComponent: () => import('./layout/platform-layout/platform-layout').then((m) => m.PlatformLayout),
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       { path: 'dashboard', loadComponent: () => import('./features/platform/dashboard/dashboard').then((m) => m.Dashboard) },
+      { path: 'approvals', loadComponent: () => import('./features/platform/approvals/approvals').then((m) => m.Approvals) },
       { path: 'tenants', loadComponent: () => import('./features/platform/tenants/tenants').then((m) => m.Tenants) },
       { path: 'tenants/:id', loadComponent: () => import('./features/platform/tenants/tenant-detail/tenant-detail').then((m) => m.TenantDetail) },
       { path: 'users', loadComponent: () => import('./features/platform/users/users').then((m) => m.Users) },

@@ -4,10 +4,10 @@ import { SidebarItem } from '../models/sidebar-item.model';
 export const PLATFORM_SIDEBAR_ITEMS: SidebarItem[] = [
   { icon: 'layout', title: 'Dashboard', route: '/portal/dashboard', roles: [ROLES.platformAdmin, ROLES.administrator] },
   
-  // Admin Section
-  { icon: 'refresh-cw', title: 'Pending Approvals', route: '/portal/approvals', roles: [ROLES.platformAdmin, ROLES.administrator], section: 'ADMIN' },
-  { icon: 'users', title: 'Tenants List', route: '/portal/tenants', roles: [ROLES.platformAdmin, ROLES.administrator], section: 'ADMIN' },
-  { icon: 'shield', title: 'Platform Users', route: '/portal/users', roles: [ROLES.platformAdmin, ROLES.administrator], section: 'ADMIN' },
+  // Administration Section
+  { icon: 'refresh-cw', title: 'Pending Approvals', route: '/portal/approvals', roles: [ROLES.platformAdmin, ROLES.administrator], section: 'ADMINISTRATION' },
+  { icon: 'users', title: 'Tenants List', route: '/portal/tenants', roles: [ROLES.platformAdmin, ROLES.administrator], section: 'ADMINISTRATION' },
+  { icon: 'shield', title: 'Platform Users', route: '/portal/users', roles: [ROLES.platformAdmin, ROLES.administrator], section: 'ADMINISTRATION' },
   
   // System Section
   { icon: 'chart', title: 'Analytics', route: '/portal/analytics', roles: [ROLES.platformAdmin, ROLES.administrator], section: 'SYSTEM' },

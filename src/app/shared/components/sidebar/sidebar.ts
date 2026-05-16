@@ -47,9 +47,14 @@ export class Sidebar {
   }
 
   readonly items = computed<SidebarItem[]>(() => {
-    const role = this.storage.get<string>(STORAGE_KEYS.role);
+    const rawRole = this.storage.get<string>(STORAGE_KEYS.role);
+    const role = rawRole?.replace(/^"|"$/g, '').trim();
     const allItems = this.mode() === 'platform' ? PLATFORM_SIDEBAR_ITEMS : WORKSPACE_SIDEBAR_ITEMS;
 
-    return allItems.filter((item) => !item.roles?.length || (role ? item.roles.includes(role) : false));
+    return allItems.filter((item) => {
+      if (!item.roles || item.roles.length === 0) return true;
+      if (!role) return false;
+      return item.roles.some(r => r.toUpperCase() === role.toUpperCase());
+    });
   });
 }

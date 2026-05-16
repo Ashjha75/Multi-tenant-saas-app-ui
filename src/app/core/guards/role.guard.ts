@@ -8,10 +8,15 @@ export const roleGuard: CanActivateFn = (route) => {
   const router = inject(Router);
 
   const allowedRoles = (route.data?.['roles'] as string[]) ?? [];
-  const role = storage.get<string>(STORAGE_KEYS.role);
+  const rawRole = storage.get<string>(STORAGE_KEYS.role);
+  const role = rawRole?.replace(/^"|"$/g, '').trim();
 
   if (!allowedRoles.length) return true;
-  if (role && allowedRoles.includes(role)) return true;
+  
+  const currentRole = role?.toUpperCase();
+  if (currentRole && allowedRoles.some(r => r.toUpperCase() === currentRole)) {
+    return true;
+  }
 
   return router.createUrlTree(['/login']);
 };

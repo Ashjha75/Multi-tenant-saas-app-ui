@@ -1,1 +1,149 @@
-<p>stock works!</p>
+<div class="space-y-6">
+  <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
+    <app-page-header title="Stock Movements" subtitle="Track all incoming and outgoing inventory"></app-page-header>
+    <div class="flex items-center gap-3">
+      <button class="flex items-center gap-2 rounded-button border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50">
+        <lucide-icon [img]="Download" class="h-4 w-4"></lucide-icon> Export
+      </button>
+      <button class="flex items-center gap-2 rounded-button bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-primaryHover" (click)="openModal()">
+        <lucide-icon [img]="Plus" class="h-4 w-4"></lucide-icon> Add Movement
+      </button>
+    </div>
+  </div>
+
+  <div class="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+      <form class="grid grid-cols-1 gap-4 md:grid-cols-4 flex-1" [formGroup]="filterForm">
+        <app-input type="date" placeholder="Date" formControlName="date"></app-input>
+        <app-select [options]="typeOptions" formControlName="type"></app-select>
+        <app-input placeholder="Filter by User" formControlName="user"></app-input>
+        <app-input placeholder="Filter by Product" formControlName="product"></app-input>
+      </form>
+      
+      <div class="flex items-center rounded-lg border border-slate-200 bg-slate-50 p-1">
+        <button 
+          class="flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors"
+          [class.bg-white]="viewMode === 'table'"
+          [class.shadow-sm]="viewMode === 'table'"
+          [class.text-slate-900]="viewMode === 'table'"
+          [class.text-slate-500]="viewMode !== 'table'"
+          [class.hover:text-slate-700]="viewMode !== 'table'"
+          (click)="setView('table')"
+        >
+          <lucide-icon [img]="List" class="h-4 w-4"></lucide-icon> Table
+        </button>
+        <button 
+          class="flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors"
+          [class.bg-white]="viewMode === 'timeline'"
+          [class.shadow-sm]="viewMode === 'timeline'"
+          [class.text-slate-900]="viewMode === 'timeline'"
+          [class.text-slate-500]="viewMode !== 'timeline'"
+          [class.hover:text-slate-700]="viewMode !== 'timeline'"
+          (click)="setView('timeline')"
+        >
+          <lucide-icon [img]="Clock" class="h-4 w-4"></lucide-icon> Timeline
+        </button>
+      </div>
+    </div>
+
+    @if (viewMode === 'table') {
+      <div class="overflow-x-auto animate-fade-in">
+        <table class="w-full text-left text-sm text-slate-600">
+          <thead class="bg-slate-50 font-medium text-slate-700">
+            <tr>
+              <th class="px-4 py-3">Date</th>
+              <th class="px-4 py-3">Product</th>
+              <th class="px-4 py-3">Type</th>
+              <th class="px-4 py-3">Qty</th>
+              <th class="px-4 py-3">User</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            @for (row of movements; track row.id) {
+              <tr class="hover:bg-slate-50 transition-colors">
+                <td class="px-4 py-3 whitespace-nowrap">{{ row.date }}</td>
+                <td class="px-4 py-3 font-medium text-slate-900">{{ row.product }}</td>
+                <td class="px-4 py-3">
+                  @if (row.type === 'IN') {
+                    <span class="inline-flex items-center gap-1.5 rounded-full bg-success/10 px-2.5 py-0.5 text-xs font-medium text-success">
+                      <lucide-icon [img]="ArrowDownCircle" class="h-3 w-3"></lucide-icon> IN
+                    </span>
+                  } @else {
+                    <span class="inline-flex items-center gap-1.5 rounded-full bg-danger/10 px-2.5 py-0.5 text-xs font-medium text-danger">
+                      <lucide-icon [img]="ArrowUpCircle" class="h-3 w-3"></lucide-icon> OUT
+                    </span>
+                  }
+                </td>
+                <td class="px-4 py-3 font-bold" [class.text-success]="row.type === 'IN'" [class.text-danger]="row.type === 'OUT'">
+                  {{ row.type === 'IN' ? '+' : '-' }}{{ row.qty }}
+                </td>
+                <td class="px-4 py-3">{{ row.user }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <div class="animate-fade-in max-w-3xl mx-auto py-6">
+        <div class="space-y-8 pl-4">
+          @for (item of movements; track item.id) {
+            <div class="relative pl-10 before:absolute before:left-4 before:top-4 before:h-full before:w-[2px] before:bg-slate-100 last:before:hidden">
+              @if (item.type === 'IN') {
+                <div class="absolute left-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-white text-success">
+                  <lucide-icon [img]="ArrowDownCircle" class="h-5 w-5"></lucide-icon>
+                </div>
+              } @else {
+                <div class="absolute left-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-white text-danger">
+                  <lucide-icon [img]="ArrowUpCircle" class="h-5 w-5"></lucide-icon>
+                </div>
+              }
+              <div class="rounded-xl border border-slate-100 bg-white p-4 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex justify-between items-start mb-2">
+                  <h4 class="font-medium text-slate-900">{{ item.product }}</h4>
+                  <span class="text-xs text-slate-400">{{ item.date }}</span>
+                </div>
+                <p class="text-sm text-slate-600 mb-3">{{ item.comment }}</p>
+                <div class="flex items-center justify-between text-xs">
+                  <span class="font-medium text-slate-500">By {{ item.user }}</span>
+                  <span class="font-bold text-sm" [class.text-success]="item.type === 'IN'" [class.text-danger]="item.type === 'OUT'">
+                    {{ item.type === 'IN' ? '+' : '-' }}{{ item.qty }} Units
+                  </span>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+@if (showModal) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm animate-fade-in">
+    <div class="w-full max-w-md rounded-[24px] bg-white shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-100 p-6">
+        <h3 class="font-heading text-xl font-bold text-slate-900">Add Stock Movement</h3>
+        <button class="text-slate-400 hover:text-slate-600 transition-colors" (click)="closeModal()">✕</button>
+      </div>
+      
+      <div class="p-6 space-y-5" [formGroup]="movementForm">
+        <app-select label="Product *" formControlName="product" [options]="productOptions"></app-select>
+        
+        <div class="grid grid-cols-2 gap-4">
+          <app-select label="Type *" formControlName="type" [options]="movementOptions"></app-select>
+          <app-input label="Quantity *" type="number" formControlName="quantity" placeholder="0"></app-input>
+        </div>
+
+        <div>
+          <label class="mb-2 block text-sm font-medium text-slate-700">Comment / Reason</label>
+          <textarea formControlName="comment" rows="3" class="w-full rounded-input border border-slate-300 bg-white px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors resize-none" placeholder="e.g. New shipment PO-1024"></textarea>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-100 p-6 flex justify-end gap-3 bg-slate-50 rounded-b-[24px]">
+        <button class="rounded-button border border-slate-200 bg-white px-6 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50" (click)="closeModal()">Cancel</button>
+        <button class="rounded-button bg-primary px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-primaryHover" (click)="saveMovement()">Record Movement</button>
+      </div>
+    </div>
+  </div>
+}

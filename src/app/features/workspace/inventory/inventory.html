@@ -1,1 +1,114 @@
-<p>inventory works!</p>
+<div class="space-y-6">
+  <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
+    <app-page-header title="Inventory" subtitle="Warehouse overview and health metrics"></app-page-header>
+    <div class="flex items-center gap-3">
+      <button class="flex items-center gap-2 rounded-button border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50">
+        <lucide-icon [img]="Download" class="h-4 w-4"></lucide-icon> Export Report
+      </button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+    <div class="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm">
+      <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+        <lucide-icon [img]="Box" class="h-5 w-5"></lucide-icon>
+      </div>
+      <p class="text-sm font-medium text-slate-500">Available</p>
+      <h3 class="text-2xl font-bold text-slate-900 mt-1">45,230</h3>
+    </div>
+    <div class="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm">
+      <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-600">
+        <lucide-icon [img]="TrendingUp" class="h-5 w-5"></lucide-icon>
+      </div>
+      <p class="text-sm font-medium text-slate-500">Reserved</p>
+      <h3 class="text-2xl font-bold text-slate-900 mt-1">1,402</h3>
+    </div>
+    <div class="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm">
+      <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-danger/10 text-danger">
+        <lucide-icon [img]="TrendingDown" class="h-5 w-5"></lucide-icon>
+      </div>
+      <p class="text-sm font-medium text-slate-500">Out Of Stock</p>
+      <h3 class="text-2xl font-bold text-slate-900 mt-1">15</h3>
+    </div>
+    <div class="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm">
+      <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-warning/10 text-warning">
+        <lucide-icon [img]="AlertTriangle" class="h-5 w-5"></lucide-icon>
+      </div>
+      <p class="text-sm font-medium text-slate-500">Low Stock</p>
+      <h3 class="text-2xl font-bold text-slate-900 mt-1">48</h3>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+    <div class="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+      <h3 class="mb-4 font-heading text-lg font-semibold text-slate-900">Stock Trend</h3>
+      <div class="flex h-[200px] items-center justify-center rounded-xl bg-slate-50 border border-dashed border-slate-200 text-sm text-slate-400">
+        [Area Chart]
+      </div>
+    </div>
+    <div class="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+      <h3 class="mb-4 font-heading text-lg font-semibold text-slate-900">Stock Aging</h3>
+      <div class="flex h-[200px] items-center justify-center rounded-xl bg-slate-50 border border-dashed border-slate-200 text-sm text-slate-400">
+        [Bar Chart]
+      </div>
+    </div>
+    <div class="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+      <h3 class="mb-4 font-heading text-lg font-semibold text-slate-900">Inventory Health</h3>
+      <div class="flex h-[200px] items-center justify-center rounded-xl bg-slate-50 border border-dashed border-slate-200 text-sm text-slate-400">
+        [Donut Chart]
+      </div>
+    </div>
+  </div>
+
+  <div class="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+    <form class="grid grid-cols-1 gap-4 md:grid-cols-3 mb-6" [formGroup]="filterForm">
+      <app-input placeholder="Search product..." formControlName="search"></app-input>
+      <app-input placeholder="Category" formControlName="category"></app-input>
+      <app-select [options]="statusOptions" formControlName="status"></app-select>
+    </form>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm text-slate-600">
+        <thead class="bg-slate-50 font-medium text-slate-700">
+          <tr>
+            <th class="px-4 py-3">Product</th>
+            <th class="px-4 py-3">Current Qty</th>
+            <th class="px-4 py-3">Threshold</th>
+            <th class="px-4 py-3">Location</th>
+            <th class="px-4 py-3">Status</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          @for (item of inventoryItems; track item.id) {
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="px-4 py-3">
+                <p class="font-medium text-slate-900">{{ item.product }}</p>
+                <p class="text-xs text-slate-500">{{ item.sku }} • {{ item.category }}</p>
+              </td>
+              <td class="px-4 py-3">
+                <span class="font-bold text-slate-900">{{ item.qty }}</span>
+              </td>
+              <td class="px-4 py-3">{{ item.threshold }}</td>
+              <td class="px-4 py-3">{{ item.location }}</td>
+              <td class="px-4 py-3">
+                @if (item.status === 'Healthy') {
+                  <span class="inline-flex items-center gap-1.5 rounded-full bg-success/10 px-2.5 py-0.5 text-xs font-medium text-success">
+                    <lucide-icon [img]="CheckCircle2" class="h-3.5 w-3.5"></lucide-icon> {{ item.status }}
+                  </span>
+                } @else if (item.status === 'Low') {
+                  <span class="inline-flex items-center gap-1.5 rounded-full bg-warning/10 px-2.5 py-0.5 text-xs font-medium text-warning">
+                    <lucide-icon [img]="AlertTriangle" class="h-3.5 w-3.5"></lucide-icon> {{ item.status }}
+                  </span>
+                } @else {
+                  <span class="inline-flex items-center gap-1.5 rounded-full bg-danger/10 px-2.5 py-0.5 text-xs font-medium text-danger">
+                    <lucide-icon [img]="TrendingDown" class="h-3.5 w-3.5"></lucide-icon> {{ item.status }}
+                  </span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

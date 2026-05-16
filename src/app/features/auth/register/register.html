@@ -1,1 +1,73 @@
-<p>register works!</p>
+<app-page-header title="Register Tenant" subtitle="Create your organization workspace in four simple steps."></app-page-header>
+
+<section class="rounded-card border border-white/5 bg-card p-6 shadow-xl">
+  <div class="mb-6 flex items-center justify-between">
+    <p class="text-sm text-slate-400">Step {{ step() }} of 4</p>
+    <app-status-badge status="pending"></app-status-badge>
+  </div>
+
+  @if (step() === 1) {
+    <div class="space-y-6">
+      <h2 class="font-heading text-xl">Company Information</h2>
+      <form class="grid grid-cols-1 gap-6 md:grid-cols-2" [formGroup]="companyForm">
+        <app-input label="Company Name" formControlName="companyName" [error]="companyForm.controls.companyName.touched && companyForm.controls.companyName.invalid ? 'Required' : ''"></app-input>
+        <app-input label="Company Code" formControlName="companyCode" [error]="companyForm.controls.companyCode.touched && companyForm.controls.companyCode.invalid ? 'Use lowercase letters, numbers, hyphen only' : ''"></app-input>
+        <app-input label="Company Email" formControlName="email" [error]="companyForm.controls.email.touched && companyForm.controls.email.invalid ? 'Valid email required' : ''"></app-input>
+        <app-select label="Industry" formControlName="industry" [options]="industries" [error]="companyForm.controls.industry.touched && companyForm.controls.industry.invalid ? 'Select industry' : ''"></app-select>
+        <app-select label="Company Size" formControlName="companySize" [options]="sizes" [error]="companyForm.controls.companySize.touched && companyForm.controls.companySize.invalid ? 'Select size' : ''"></app-select>
+        <app-select label="Country" formControlName="country" [options]="countries" [error]="companyForm.controls.country.touched && companyForm.controls.country.invalid ? 'Select country' : ''"></app-select>
+      </form>
+    </div>
+  }
+
+  @if (step() === 2) {
+    <div class="space-y-6">
+      <h2 class="font-heading text-xl">Admin Setup</h2>
+      <form class="grid grid-cols-1 gap-6 md:grid-cols-2" [formGroup]="adminForm">
+        <app-input label="Full Name" formControlName="adminFullName" [error]="adminForm.controls.adminFullName.touched && adminForm.controls.adminFullName.invalid ? 'Required' : ''"></app-input>
+        <app-input label="Username" formControlName="adminUsername" [error]="adminForm.controls.adminUsername.touched && adminForm.controls.adminUsername.invalid ? 'Required' : ''"></app-input>
+        <app-input label="Admin Email" formControlName="adminEmail" [error]="adminForm.controls.adminEmail.touched && adminForm.controls.adminEmail.invalid ? 'Valid email required' : ''"></app-input>
+        <app-input label="Password" type="password" formControlName="adminPassword" [error]="adminForm.controls.adminPassword.touched && adminForm.controls.adminPassword.invalid ? '8+, uppercase, number, special character required' : ''"></app-input>
+        <app-input label="Confirm Password" type="password" formControlName="confirmPassword" [error]="adminForm.controls.confirmPassword.touched && !passwordsMatch() ? 'Passwords do not match' : ''"></app-input>
+      </form>
+    </div>
+  }
+
+  @if (step() === 3) {
+    <div class="space-y-6">
+      <h2 class="font-heading text-xl">Review</h2>
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <article class="rounded-card border border-white/5 bg-white/5 p-6">
+          <h3 class="font-heading text-lg">Company Summary</h3>
+          <p class="mt-2 text-sm text-slate-300">{{ companyForm.value.companyName }}</p>
+          <p class="text-sm text-slate-400">{{ companyForm.value.companyCode }}</p>
+          <p class="text-sm text-slate-400">{{ companyForm.value.email }}</p>
+        </article>
+        <article class="rounded-card border border-white/5 bg-white/5 p-6">
+          <h3 class="font-heading text-lg">Admin Summary</h3>
+          <p class="mt-2 text-sm text-slate-300">{{ adminForm.value.adminFullName }}</p>
+          <p class="text-sm text-slate-400">{{ adminForm.value.adminUsername }}</p>
+          <p class="text-sm text-slate-400">{{ adminForm.value.adminEmail }}</p>
+        </article>
+      </div>
+    </div>
+  }
+
+  @if (step() === 4) {
+    <div class="space-y-6 text-center">
+      <h2 class="font-heading text-xl">Creating Request</h2>
+      <p class="text-sm text-slate-300">Submitting your tenant and provisioning workflow.</p>
+      <ol class="mx-auto max-w-md space-y-3 text-left text-sm text-slate-300">
+        <li>1. Submitted</li>
+        <li>2. Review</li>
+        <li>3. Provisioning</li>
+        <li>4. Ready</li>
+      </ol>
+    </div>
+  }
+
+  <div class="mt-8 flex justify-between">
+    <app-button variant="ghost" (clicked)="back()" [disabled]="step() === 1 || loading()">Back</app-button>
+    <app-button (clicked)="next()" [disabled]="loading() || step() === 4">{{ step() === 3 ? 'Submit' : 'Next' }}</app-button>
+  </div>
+</section>

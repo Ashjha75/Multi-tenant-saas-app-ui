@@ -4,6 +4,7 @@ import { Modal } from '../modal/modal';
 
 @Component({
   selector: 'app-confirm-dialog',
+  standalone: true,
   imports: [Modal, Button],
   templateUrl: './confirm-dialog.html',
   styleUrl: './confirm-dialog.css',

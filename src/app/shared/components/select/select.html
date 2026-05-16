@@ -2,9 +2,21 @@
   @if (label()) {
     <label class="text-sm font-medium text-slate-200" [attr.for]="id()">{{ label() }}</label>
   }
-  <select class="app-input" [id]="id()" [value]="value()" (change)="onChange($event)">
+  <select
+    class="app-input"
+    [class.border-danger]="!!error()"
+    [id]="id()"
+    [value]="value"
+    [disabled]="isDisabled"
+    (change)="onSelect($event)"
+    (blur)="onBlur()"
+  >
+    <option value="">{{ placeholder() }}</option>
     @for (option of options(); track option.value) {
       <option [value]="option.value">{{ option.label }}</option>
     }
   </select>
+  @if (error()) {
+    <p class="text-xs text-danger">{{ error() }}</p>
+  }
 </div>

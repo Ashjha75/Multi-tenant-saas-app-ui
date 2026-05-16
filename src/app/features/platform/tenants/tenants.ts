@@ -23,7 +23,7 @@ interface TenantData {
 @Component({
   selector: 'app-tenants',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, PageHeader, Button, Input, Select, StatusBadge],
+  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, PageHeader, Input, Select, StatusBadge],
   templateUrl: './tenants.html'
 })
 export class Tenants {

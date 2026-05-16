@@ -6,7 +6,7 @@ import { Button } from '../../../shared/components/button/button';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, Button],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './dashboard.html'
 })
 export class Dashboard {

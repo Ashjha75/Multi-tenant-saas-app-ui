@@ -12,7 +12,7 @@ import { finalize } from 'rxjs';
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, PageHeader, Button, Input],
+  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, PageHeader, Input],
   templateUrl: './categories.html'
 })
 export class Categories implements OnInit {
@@ -25,6 +25,14 @@ export class Categories implements OnInit {
   readonly Trash2 = Trash2;
   readonly Download = Download;
   readonly Package = Package;
+  readonly Smartphone = Smartphone;
+  readonly Monitor = Monitor;
+  readonly Headphones = Headphones;
+  readonly Camera = Camera;
+  readonly Printer = Printer;
+  readonly Watch = Watch;
+  readonly Mouse = Mouse;
+  readonly Speaker = Speaker;
 
   showModal = false;
   isLoading = false;

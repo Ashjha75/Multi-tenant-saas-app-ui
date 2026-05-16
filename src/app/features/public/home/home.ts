@@ -7,7 +7,7 @@ import { KpiCard } from '../../../shared/components/kpi-card/kpi-card';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, RouterLink, LucideAngularModule, KpiCard, Card],
+  imports: [CommonModule, RouterLink, LucideAngularModule],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

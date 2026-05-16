@@ -6,6 +6,7 @@ export const PLATFORM_SIDEBAR_ITEMS: SidebarItem[] = [
   { icon: 'users', title: 'Tenants', route: '/portal/tenants', roles: [ROLES.platformAdmin] },
   { icon: 'shield', title: 'Users', route: '/portal/users', roles: [ROLES.platformAdmin] },
   { icon: 'chart', title: 'Analytics', route: '/portal/analytics', roles: [ROLES.platformAdmin] },
+  { icon: 'file-clock', title: 'Audit Logs', route: '/portal/audit', roles: [ROLES.platformAdmin] },
   { icon: 'settings', title: 'Settings', route: '/portal/settings', roles: [ROLES.platformAdmin] },
 ];
 

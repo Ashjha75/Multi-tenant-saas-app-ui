@@ -89,7 +89,7 @@
               type="password"
               formControlName="adminPassword" 
               placeholder="••••••••"
-              hint="Must be 8+ chars with Uppercase, Number, and Symbol"
+              hint="8+ chars with Uppercase, Number, and Symbol"
               [error]="registerForm.get('adminPassword')?.touched && registerForm.get('adminPassword')?.errors ? 'Password does not meet complexity requirements' : ''"
             ></app-input>
           </div>

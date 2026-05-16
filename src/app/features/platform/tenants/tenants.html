@@ -102,3 +102,11 @@
     </div>
   </div>
 }
+
+<app-confirm-dialog
+  [open]="showConfirmDialog"
+  title="Suspend Tenant"
+  message="Are you sure you want to suspend this tenant?"
+  (confirm)="confirmSuspend()"
+  (cancel)="cancelSuspend()">
+</app-confirm-dialog>

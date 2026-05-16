@@ -6,6 +6,7 @@ import { PageHeader } from '../../../shared/components/page-header/page-header';
 import { Input } from '../../../shared/components/input/input';
 import { Select } from '../../../shared/components/select/select';
 import { StatusBadge } from '../../../shared/components/status-badge/status-badge';
+import { ConfirmDialog } from '../../../shared/components/confirm-dialog/confirm-dialog';
 import { TenantService } from '../../../core/services/tenant.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { finalize } from 'rxjs';
@@ -13,7 +14,7 @@ import { finalize } from 'rxjs';
 @Component({
   selector: 'app-tenants',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, PageHeader, Input, Select, StatusBadge],
+  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, PageHeader, Input, Select, StatusBadge, ConfirmDialog],
   templateUrl: './tenants.html'
 })
 export class Tenants implements OnInit {
@@ -132,17 +133,35 @@ export class Tenants implements OnInit {
     });
   }
 
+  showConfirmDialog = false;
+  tenantToSuspend: string | null = null;
+
   suspendTenant(id: string) {
-    if (!confirm('Are you sure you want to suspend this tenant?')) return;
+    this.tenantToSuspend = id;
+    this.showConfirmDialog = true;
+  }
+
+  confirmSuspend() {
+    if (!this.tenantToSuspend) return;
+    this.showConfirmDialog = false;
     this.isLoading = true;
-    this.tenantService.suspendTenant(id).pipe(
+    this.tenantService.suspendTenant(this.tenantToSuspend).pipe(
       finalize(() => this.isLoading = false)
     ).subscribe({
       next: () => {
         this.notifier.success('Tenant suspended');
+        this.tenantToSuspend = null;
         this.loadTenants();
       },
-      error: () => this.notifier.error('Failed to suspend tenant')
+      error: () => {
+        this.notifier.error('Failed to suspend tenant');
+        this.tenantToSuspend = null;
+      }
     });
+  }
+
+  cancelSuspend() {
+    this.showConfirmDialog = false;
+    this.tenantToSuspend = null;
   }
 }

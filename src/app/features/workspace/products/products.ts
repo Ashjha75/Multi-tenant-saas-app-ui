@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LucideAngularModule, Plus, Download, Eye, Edit, Trash2, Image as ImageIcon } from 'lucide-angular';
+import { LucideAngularModule, Plus, Download, Eye, Edit, Trash2, Image as ImageIcon, Box } from 'lucide-angular';
 import { PageHeader } from '../../../shared/components/page-header/page-header';
 import { Input } from '../../../shared/components/input/input';
 import { Select } from '../../../shared/components/select/select';
@@ -23,12 +23,14 @@ export class Products implements OnInit {
   private readonly categoryService = inject(CategoryService);
   private readonly notifier = inject(NotificationService);
 
+  protected readonly Math = Math;
   readonly Plus = Plus;
   readonly Download = Download;
   readonly Eye = Eye;
   readonly Edit = Edit;
   readonly Trash2 = Trash2;
   readonly ImageIcon = ImageIcon;
+  readonly Box = Box;
 
   showModal = false;
   isLoading = false;
@@ -93,7 +95,6 @@ export class Products implements OnInit {
 
   loadProducts() {
     this.isLoading = true;
-    // Using current pagination
     this.productService.getProducts(this.currentPage() - 1, this.pageSize()).pipe(
       finalize(() => this.isLoading = false)
     ).subscribe({
@@ -115,7 +116,10 @@ export class Products implements OnInit {
     this.selectedProductId = null;
     this.modalTitle = 'Add Product';
     this.modalAction = 'Save Product';
-    this.productForm.reset();
+    this.productForm.reset({
+      alertThreshold: 10,
+      stock: 0
+    });
     this.showModal = true;
   }
 
@@ -123,13 +127,23 @@ export class Products implements OnInit {
     this.selectedProductId = product.id;
     this.modalTitle = 'Edit Product';
     this.modalAction = 'Update Product';
+    
+    // Find category ID by name if needed
+    let catId = product.categoryId;
+    if (!catId && product.category) {
+      const categoryName = typeof product.category === 'object' ? product.category.name : product.category;
+      const found = this.categoryOptions().find(o => o.label === categoryName);
+      catId = found ? found.value : '';
+    }
+
     this.productForm.patchValue({
       name: product.name,
       reference: product.reference,
       description: product.description,
       price: product.price,
-      alertThreshold: product.alertThreshold,
-      categoryId: product.categoryId || product.category?.id
+      alertThreshold: product.alertThreshold || 10,
+      categoryId: catId,
+      stock: product.stock || 0
     });
     this.showModal = true;
   }

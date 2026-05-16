@@ -1,11 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LucideAngularModule, FolderPlus, Edit, Trash2, Smartphone, Monitor, Headphones, Camera, Printer, Watch, Mouse, Speaker, Download, Package } from 'lucide-angular';
+import { LucideAngularModule, FolderPlus, Edit, Trash2, Smartphone, Monitor, Headphones, Camera, Printer, Watch, Mouse, Speaker, Download, Package, ChevronLeft, ChevronRight } from 'lucide-angular';
 import { PageHeader } from '../../../shared/components/page-header/page-header';
-import { Button } from '../../../shared/components/button/button';
 import { Input } from '../../../shared/components/input/input';
 import { ConfirmDialog } from '../../../shared/components/confirm-dialog/confirm-dialog';
+import { Modal } from '../../../shared/components/modal/modal';
 import { CategoryService } from '../../../core/services/category.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { finalize } from 'rxjs';
@@ -13,7 +13,7 @@ import { finalize } from 'rxjs';
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, PageHeader, Input, ConfirmDialog],
+  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, PageHeader, Input, ConfirmDialog, Modal],
   templateUrl: './categories.html'
 })
 export class Categories implements OnInit {
@@ -21,19 +21,13 @@ export class Categories implements OnInit {
   private readonly categoryService = inject(CategoryService);
   private readonly notifier = inject(NotificationService);
 
+  protected readonly Math = Math;
   readonly FolderPlus = FolderPlus;
   readonly Edit = Edit;
   readonly Trash2 = Trash2;
-  readonly Download = Download;
   readonly Package = Package;
-  readonly Smartphone = Smartphone;
-  readonly Monitor = Monitor;
-  readonly Headphones = Headphones;
-  readonly Camera = Camera;
-  readonly Printer = Printer;
-  readonly Watch = Watch;
-  readonly Mouse = Mouse;
-  readonly Speaker = Speaker;
+  readonly ChevronLeft = ChevronLeft;
+  readonly ChevronRight = ChevronRight;
 
   showModal = false;
   isLoading = false;
@@ -52,7 +46,10 @@ export class Categories implements OnInit {
     { name: 'Speaker', img: Speaker }
   ];
 
-  categories: any[] = [];
+  currentPage = signal(1);
+  pageSize = signal(8);
+  totalItems = signal(0);
+  categories = signal<any[]>([]);
 
   categoryForm = this.fb.group({
     name: ['', Validators.required],
@@ -71,14 +68,21 @@ export class Categories implements OnInit {
 
   loadCategories() {
     this.isLoading = true;
-    this.categoryService.getCategories().pipe(
+    this.categoryService.getCategories(this.currentPage() - 1, this.pageSize()).pipe(
       finalize(() => this.isLoading = false)
     ).subscribe({
       next: (res) => {
-        this.categories = res.content || res || [];
+        const items = res.content || res || [];
+        this.categories.set(items);
+        this.totalItems.set(res.totalElements || items.length);
       },
       error: () => this.notifier.error('Failed to load categories')
     });
+  }
+
+  onPageChange(page: number) {
+    this.currentPage.set(page);
+    this.loadCategories();
   }
 
   openModal() {

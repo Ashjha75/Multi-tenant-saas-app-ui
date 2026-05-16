@@ -1,57 +1,108 @@
 import { Routes } from '@angular/router';
-import { Login } from './features/auth/login/login';
-import { Register } from './features/auth/register/register';
-import { About } from './features/public/about/about';
-import { Contact } from './features/public/contact/contact';
-import { FeaturesPage } from './features/public/features-page/features-page';
-import { Home } from './features/public/home/home';
-import { Pricing } from './features/public/pricing/pricing';
-import { Analytics as PlatformAnalytics } from './features/platform/analytics/analytics';
-import { Dashboard as PlatformDashboard } from './features/platform/dashboard/dashboard';
-import { Tenants } from './features/platform/tenants/tenants';
-import { Dashboard as WorkspaceDashboard } from './features/workspace/dashboard/dashboard';
-import { Inventory } from './features/workspace/inventory/inventory';
-import { Products } from './features/workspace/products/products';
-import { Reports } from './features/workspace/reports/reports';
-import { Stock } from './features/workspace/stock/stock';
-import { PlatformLayout } from './layout/platform-layout/platform-layout';
-import { PublicLayout } from './layout/public-layout/public-layout';
-import { WorkspaceLayout } from './layout/workspace-layout/workspace-layout';
+import { ROLES } from './core/constants/role.constants';
+import { authGuard } from './core/guards/auth.guard';
+import { roleGuard } from './core/guards/role.guard';
+import { tenantGuard } from './core/guards/tenant.guard';
 
 export const routes: Routes = [
   {
     path: '',
-    component: PublicLayout,
+    loadComponent: () => import('./layout/public-layout/public-layout').then((m) => m.PublicLayout),
     children: [
-      { path: '', component: Home },
-      { path: 'features', component: FeaturesPage },
-      { path: 'price', component: Pricing },
-      { path: 'about', component: About },
-      { path: 'contact', component: Contact },
-      { path: 'login', component: Login },
-      { path: 'register', component: Register },
+      { path: '', loadComponent: () => import('./features/public/home/home').then((m) => m.Home) },
+      {
+        path: 'features',
+        loadComponent: () => import('./features/public/features/features').then((m) => m.Features),
+      },
+      { path: 'price', loadComponent: () => import('./features/public/pricing/pricing').then((m) => m.Pricing) },
+      { path: 'pricing', redirectTo: 'price', pathMatch: 'full' },
+      { path: 'about', loadComponent: () => import('./features/public/about/about').then((m) => m.About) },
+      {
+        path: 'contact',
+        loadComponent: () => import('./features/public/contact/contact').then((m) => m.Contact),
+      },
+      { path: 'login', loadComponent: () => import('./features/auth/login/login').then((m) => m.Login) },
+      {
+        path: 'register',
+        loadComponent: () => import('./features/auth/register/register').then((m) => m.Register),
+      },
+      {
+        path: 'forgot-password',
+        loadComponent: () =>
+          import('./features/auth/forgot-password/forgot-password').then((m) => m.ForgotPassword),
+      },
     ],
   },
   {
     path: 'portal',
-    component: PlatformLayout,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: [ROLES.platformAdmin] },
+    loadComponent: () =>
+      import('./layout/platform-layout/platform-layout').then((m) => m.PlatformLayout),
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
-      { path: 'dashboard', component: PlatformDashboard },
-      { path: 'tenants', component: Tenants },
-      { path: 'analytics', component: PlatformAnalytics },
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./features/platform/dashboard/dashboard').then((m) => m.Dashboard),
+      },
+      {
+        path: 'tenants',
+        loadComponent: () => import('./features/platform/tenants/tenants').then((m) => m.Tenants),
+      },
+      {
+        path: 'users',
+        loadComponent: () => import('./features/platform/users/users').then((m) => m.Users),
+      },
+      {
+        path: 'analytics',
+        loadComponent: () => import('./features/platform/analytics/analytics').then((m) => m.Analytics),
+      },
+      {
+        path: 'settings',
+        loadComponent: () => import('./features/platform/settings/settings').then((m) => m.Settings),
+      },
     ],
   },
   {
     path: 'workspace',
-    component: WorkspaceLayout,
+    canActivate: [authGuard, tenantGuard],
+    loadComponent: () =>
+      import('./layout/workspace-layout/workspace-layout').then((m) => m.WorkspaceLayout),
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
-      { path: 'dashboard', component: WorkspaceDashboard },
-      { path: 'products', component: Products },
-      { path: 'inventory', component: Inventory },
-      { path: 'stock', component: Stock },
-      { path: 'reports', component: Reports },
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./features/workspace/dashboard/dashboard').then((m) => m.Dashboard),
+      },
+      {
+        path: 'products',
+        loadComponent: () => import('./features/workspace/products/products').then((m) => m.Products),
+      },
+      {
+        path: 'categories',
+        loadComponent: () => import('./features/workspace/categories/categories').then((m) => m.Categories),
+      },
+      {
+        path: 'stock',
+        loadComponent: () => import('./features/workspace/stock/stock').then((m) => m.Stock),
+      },
+      {
+        path: 'inventory',
+        loadComponent: () => import('./features/workspace/inventory/inventory').then((m) => m.Inventory),
+      },
+      {
+        path: 'reports',
+        loadComponent: () => import('./features/workspace/reports/reports').then((m) => m.Reports),
+      },
+      {
+        path: 'notifications',
+        loadComponent: () =>
+          import('./features/workspace/notifications/notifications').then((m) => m.Notifications),
+      },
+      {
+        path: 'settings',
+        loadComponent: () => import('./features/workspace/settings/settings').then((m) => m.Settings),
+      },
     ],
   },
   { path: '**', redirectTo: '' },

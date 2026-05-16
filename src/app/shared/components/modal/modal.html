@@ -1,8 +1,8 @@
 @if (open()) {
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm" (click)="onClose()">
-    <section class="w-full max-w-xl rounded-[24px] border border-border bg-card p-6 shadow-cardHover" (click)="$event.stopPropagation()">
+    <section class="w-full max-w-xl rounded-modal border border-soft bg-card p-6 shadow-modal" (click)="$event.stopPropagation()">
       <header class="mb-4 flex items-center justify-between">
-        <h3 class="text-lg font-semibold">{{ title() }}</h3>
+        <h3 class="font-heading text-lg font-semibold">{{ title() }}</h3>
         <button class="rounded-lg px-2 py-1 text-slate-300 hover:bg-white/10" (click)="onClose()">x</button>
       </header>
       <ng-content></ng-content>

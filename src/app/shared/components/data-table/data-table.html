@@ -1,12 +1,16 @@
-<div class="overflow-hidden rounded-[20px] border border-border bg-card">
+<div class="app-table">
   <table cdk-table [dataSource]="rows()" class="w-full text-left">
     @for (column of columns(); track column.key) {
       <ng-container [cdkColumnDef]="column.key">
-        <th cdk-header-cell *cdkHeaderCellDef class="border-b border-border px-4 py-3 text-xs uppercase tracking-wider text-slate-400">
+        <th cdk-header-cell *cdkHeaderCellDef class="border-b border-white/10 px-4 py-3 text-xs uppercase tracking-wider text-slate-400">
           {{ column.label }}
         </th>
-        <td cdk-cell *cdkCellDef="let row" class="border-b border-border/60 px-4 py-3 text-sm text-slate-200">
-          {{ row[column.key] }}
+        <td cdk-cell *cdkCellDef="let row" class="border-b border-white/5 px-4 py-3 text-sm text-slate-200">
+          @if (isStatusColumn(column.key)) {
+            <span class="status-pill" [class]="'status-pill ' + getStatusClass(row[column.key])">{{ row[column.key] }}</span>
+          } @else {
+            {{ row[column.key] }}
+          }
         </td>
       </ng-container>
     }

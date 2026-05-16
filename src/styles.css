@@ -1,23 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
 @import "tailwindcss";
 @config "../tailwind.config.js";
 
 :root {
-  --bg: #0b1020;
-  --surface: #111827;
-  --card: #151c2f;
-  --card-hover: #1e293b;
-  --primary: #7c3aed;
-  --primary-hover: #8b5cf6;
-  --success: #10b981;
-  --danger: #ef4444;
+  --bg: #0a0f1e;
+  --bg-secondary: #111827;
+  --sidebar: #0e1528;
+  --card: #161d31;
+  --card-hover: #1d2640;
+  --border: rgba(255, 255, 255, 0.06);
+
+  --primary: #6366f1;
+  --primary-hover: #7c3aed;
+  --accent-soft: #8b5cf6;
+  --accent-light: #a78bfa;
+
+  --success: #22c55e;
   --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #06b6d4;
+  --neutral: #64748b;
+
   --text: #f8fafc;
-  --text-muted: #94a3b8;
-  --border: #273449;
-  --hero-gradient: linear-gradient(135deg, #0b1020, #141b35, #1e1b4b);
-  --button-gradient: linear-gradient(90deg, #7c3aed, #a855f7);
-  --card-gradient: linear-gradient(145deg, #151c2f, #1e293b);
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --placeholder: #6b7280;
+
+  --hero-gradient:
+    radial-gradient(circle at top left, rgba(99, 102, 241, 0.25), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(139, 92, 246, 0.15), transparent 30%),
+    #0a0f1e;
+
+  --button-gradient: linear-gradient(90deg, #6366f1, #8b5cf6);
+  --kpi-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
 }
 
 html,
@@ -28,10 +44,23 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: 'Inter', sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 * {
   box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-heading {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-weight: 700;
 }
 
 ::-webkit-scrollbar {
@@ -40,7 +69,7 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: var(--primary);
-  border-radius: 20px;
+  border-radius: 999px;
 }
 
 .app-page {
@@ -49,31 +78,104 @@ body {
   color: var(--text);
 }
 
+.hero-surface {
+  background: var(--hero-gradient);
+}
+
+.glass-surface {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(18px);
+}
+
 .app-section {
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: 22px;
   background: var(--card);
-  padding: 1.5rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 24px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.app-section:hover {
+  background: var(--card-hover);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+}
+
+.app-kpi-card {
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--kpi-gradient);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.app-kpi-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
 }
 
 .app-input {
-  height: 52px;
+  height: 54px;
   width: 100%;
   border-radius: 14px;
   border: 1px solid var(--border);
-  background: var(--card);
+  background: #161d31;
   padding: 0 16px;
-  color: #f1f5f9;
+  color: var(--text);
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .app-input::placeholder {
-  color: #94a3b8;
+  color: var(--placeholder);
 }
 
 .app-input:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.2);
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.18);
+}
+
+.app-table {
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: #161d31;
+  overflow: hidden;
+}
+
+.app-table thead {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.app-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-active {
+  border-color: rgba(34, 197, 94, 0.35);
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.16);
+}
+
+.status-pending {
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.16);
+}
+
+.status-blocked,
+.status-suspended {
+  border-color: rgba(239, 68, 68, 0.35);
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.16);
 }

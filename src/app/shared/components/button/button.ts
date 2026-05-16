@@ -24,9 +24,9 @@ export class Button {
   readonly buttonClass = computed(() => {
     const variantClasses: Record<ButtonVariant, string> = {
       primary:
-        'bg-[linear-gradient(90deg,#7C3AED,#A855F7)] text-white shadow-card hover:shadow-cardHover hover:brightness-110',
-      secondary: 'border border-border bg-white/5 text-slate-100 hover:bg-white/10',
-      danger: 'bg-danger text-white hover:brightness-110',
+        'bg-[linear-gradient(90deg,#6366F1,#8B5CF6)] text-white shadow-card hover:scale-[1.02] hover:brightness-110',
+      secondary: 'glass-surface text-slate-100 hover:bg-white/10',
+      danger: 'bg-danger text-white hover:scale-[1.02] hover:brightness-110',
       ghost: 'bg-transparent text-slate-200 hover:bg-white/10',
     };
 
@@ -37,7 +37,7 @@ export class Button {
     };
 
     return clsx(
-      'inline-flex items-center justify-center rounded-xl font-semibold transition duration-200 disabled:cursor-not-allowed disabled:opacity-60',
+      'inline-flex items-center justify-center rounded-button font-semibold transition duration-200 disabled:cursor-not-allowed disabled:opacity-60',
       variantClasses[this.variant()],
       sizeClasses[this.size()],
       this.block() ? 'w-full' : '',

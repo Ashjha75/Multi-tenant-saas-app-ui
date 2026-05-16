@@ -1,1 +1,181 @@
-<p>dashboard works!</p>
+<div class="space-y-6">
+  <div class="flex items-center justify-between mb-8">
+    <app-page-header title="Platform Dashboard" subtitle="Monitor tenant growth and system activity"></app-page-header>
+    <div class="flex items-center gap-3">
+      <button class="flex items-center gap-2 rounded-button border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50">
+        <lucide-icon [img]="RefreshCcw" class="h-4 w-4"></lucide-icon> Refresh
+      </button>
+      <button class="flex items-center gap-2 rounded-button bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-primaryHover">
+        <lucide-icon [img]="Download" class="h-4 w-4"></lucide-icon> Export Report
+      </button>
+    </div>
+  </div>
+
+  <!-- KPI Grid -->
+  <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+    <div class="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
+          <lucide-icon [img]="Building2"></lucide-icon>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-slate-500">Total Tenants</p>
+          <div class="flex items-baseline gap-2">
+            <h3 class="text-2xl font-bold text-slate-900">124</h3>
+            <span class="text-xs font-semibold text-success">+12%</span>
+          </div>
+        </div>
+      </div>
+      <div class="h-8 w-full bg-slate-50 rounded-lg flex items-center px-2 text-xs text-slate-400">Mini chart placeholder</div>
+    </div>
+
+    <div class="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-success/10 text-success">
+          <lucide-icon [img]="BadgeCheck"></lucide-icon>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-slate-500">Active</p>
+          <div class="flex items-baseline gap-2">
+            <h3 class="text-2xl font-bold text-slate-900">98</h3>
+          </div>
+        </div>
+      </div>
+      <div class="h-8 w-full bg-slate-50 rounded-lg flex items-center px-2 text-xs text-slate-400">Mini chart placeholder</div>
+    </div>
+
+    <div class="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-warning/10 text-warning">
+          <lucide-icon [img]="Clock3"></lucide-icon>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-slate-500">Pending Approval</p>
+          <div class="flex items-baseline gap-2">
+            <h3 class="text-2xl font-bold text-slate-900">18</h3>
+          </div>
+        </div>
+      </div>
+      <div class="h-8 w-full bg-slate-50 rounded-lg flex items-center px-2 text-xs text-slate-400">Mini chart placeholder</div>
+    </div>
+
+    <div class="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-danger/10 text-danger">
+          <lucide-icon [img]="Ban"></lucide-icon>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-slate-500">Suspended</p>
+          <div class="flex items-baseline gap-2">
+            <h3 class="text-2xl font-bold text-slate-900">8</h3>
+          </div>
+        </div>
+      </div>
+      <div class="h-8 w-full bg-slate-50 rounded-lg flex items-center px-2 text-xs text-slate-400">Mini chart placeholder</div>
+    </div>
+  </div>
+
+  <!-- Main Grid -->
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-12">
+    <div class="lg:col-span-8 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+      <h3 class="mb-4 font-heading text-lg font-semibold text-slate-900">Tenant Registration Trend</h3>
+      <div class="flex h-[300px] w-full items-end justify-between gap-2 px-2 pb-6 pt-4 text-xs text-slate-400">
+        <!-- Fake Area Chart -->
+        <div class="flex h-full w-full flex-col justify-end gap-1">
+          <div class="w-full rounded-t-sm bg-primary/20" style="height: 30%;"></div>
+          <span class="text-center">Nov</span>
+        </div>
+        <div class="flex h-full w-full flex-col justify-end gap-1">
+          <div class="w-full rounded-t-sm bg-primary/40" style="height: 50%;"></div>
+          <span class="text-center">Dec</span>
+        </div>
+        <div class="flex h-full w-full flex-col justify-end gap-1">
+          <div class="w-full rounded-t-sm bg-primary/30" style="height: 40%;"></div>
+          <span class="text-center">Jan</span>
+        </div>
+        <div class="flex h-full w-full flex-col justify-end gap-1">
+          <div class="w-full rounded-t-sm bg-primary/60" style="height: 70%;"></div>
+          <span class="text-center">Feb</span>
+        </div>
+        <div class="flex h-full w-full flex-col justify-end gap-1">
+          <div class="w-full rounded-t-sm bg-primary/80" style="height: 90%;"></div>
+          <span class="text-center">Mar</span>
+        </div>
+        <div class="flex h-full w-full flex-col justify-end gap-1">
+          <div class="w-full rounded-t-sm bg-primary" style="height: 100%;"></div>
+          <span class="text-center">Apr</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:col-span-4 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+      <h3 class="mb-6 font-heading text-lg font-semibold text-slate-900">Status Overview</h3>
+      <div class="space-y-6">
+        <div>
+          <div class="mb-2 flex justify-between text-sm">
+            <span class="font-medium text-slate-700">Active</span>
+            <span class="text-slate-500">79%</span>
+          </div>
+          <div class="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+            <div class="h-full rounded-full bg-success" style="width: 79%"></div>
+          </div>
+        </div>
+        <div>
+          <div class="mb-2 flex justify-between text-sm">
+            <span class="font-medium text-slate-700">Pending</span>
+            <span class="text-slate-500">14%</span>
+          </div>
+          <div class="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+            <div class="h-full rounded-full bg-warning" style="width: 14%"></div>
+          </div>
+        </div>
+        <div>
+          <div class="mb-2 flex justify-between text-sm">
+            <span class="font-medium text-slate-700">Suspended</span>
+            <span class="text-slate-500">6%</span>
+          </div>
+          <div class="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+            <div class="h-full rounded-full bg-danger" style="width: 6%"></div>
+          </div>
+        </div>
+        <div>
+          <div class="mb-2 flex justify-between text-sm">
+            <span class="font-medium text-slate-700">Inactive</span>
+            <span class="text-slate-500">1%</span>
+          </div>
+          <div class="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+            <div class="h-full rounded-full bg-slate-400" style="width: 1%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Timeline -->
+  <div class="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+    <h3 class="mb-6 font-heading text-lg font-semibold text-slate-900">Recent Activity</h3>
+    <div class="space-y-6 pl-2">
+      <div class="relative pl-8 before:absolute before:left-3 before:top-2 before:h-full before:w-[2px] before:bg-slate-100">
+        <div class="absolute left-1 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-white text-primary">
+          <lucide-icon [img]="Activity" class="h-4 w-4"></lucide-icon>
+        </div>
+        <p class="font-medium text-slate-900">Acme approved</p>
+        <p class="text-sm text-slate-500">Tenant request was approved by Admin - 10 mins ago</p>
+      </div>
+      <div class="relative pl-8 before:absolute before:left-3 before:top-2 before:h-full before:w-[2px] before:bg-slate-100">
+        <div class="absolute left-1 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-white text-primary">
+          <lucide-icon [img]="Activity" class="h-4 w-4"></lucide-icon>
+        </div>
+        <p class="font-medium text-slate-900">TechNova registered</p>
+        <p class="text-sm text-slate-500">New tenant registration received - 1 hour ago</p>
+      </div>
+      <div class="relative pl-8">
+        <div class="absolute left-1 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-white text-primary">
+          <lucide-icon [img]="Activity" class="h-4 w-4"></lucide-icon>
+        </div>
+        <p class="font-medium text-slate-900">Workspace provisioned</p>
+        <p class="text-sm text-slate-500">Global Logistics workspace setup completed - 3 hours ago</p>
+      </div>
+    </div>
+  </div>
+</div>

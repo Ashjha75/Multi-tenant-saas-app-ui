@@ -8,7 +8,7 @@ import { KpiCard } from '../../../shared/components/kpi-card/kpi-card';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, PageHeader, Button],
+  imports: [CommonModule, LucideAngularModule, PageHeader],
   templateUrl: './dashboard.html'
 })
 export class Dashboard {

@@ -13,7 +13,7 @@ import { StatusBadge } from '../../../shared/components/status-badge/status-badg
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, ReactiveFormsModule, PageHeader, Input, Select, Button, StatusBadge],
+  imports: [CommonModule, ReactiveFormsModule, PageHeader, Input, Select],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })

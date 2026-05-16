@@ -15,7 +15,7 @@ import { finalize } from 'rxjs';
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, PageHeader, Button, Input, Select, DataTable, StatusBadge],
+  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, PageHeader, Button, Input, Select],
   templateUrl: './products.html'
 })
 export class Products implements OnInit {

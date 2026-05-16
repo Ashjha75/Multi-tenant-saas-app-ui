@@ -11,7 +11,7 @@ import { Input } from '../../../shared/components/input/input';
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, LucideAngularModule, Input, Button],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, LucideAngularModule, Input],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })

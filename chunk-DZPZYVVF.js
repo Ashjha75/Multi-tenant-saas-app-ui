@@ -1,0 +1,1 @@
+import{Pb as a,Va as i,rb as o,sb as n}from"./chunk-NSR53WHU.js";var s=class e{static \u0275fac=function(t){return new(t||e)};static \u0275cmp=i({type:e,selectors:[["app-audit"]],decls:2,vars:0,template:function(t,m){t&1&&(o(0,"div"),a(1,"Audit Logs coming soon"),n())},encapsulation:2})};export{s as Audit};

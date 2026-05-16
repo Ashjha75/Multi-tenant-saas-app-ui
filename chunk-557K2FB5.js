@@ -1,0 +1,1 @@
+import{Pb as r,Va as t,rb as i,sb as n}from"./chunk-NSR53WHU.js";var a=class o{static \u0275fac=function(e){return new(e||o)};static \u0275cmp=t({type:o,selectors:[["app-profile"]],decls:2,vars:0,template:function(e,f){e&1&&(i(0,"div"),r(1,"Profile coming soon"),n())},encapsulation:2})};export{a as Profile};

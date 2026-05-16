@@ -1,26 +1,79 @@
-<div class="grid grid-cols-1 gap-8 md:grid-cols-2">
-  <section class="space-y-4 rounded-card border border-white/5 bg-card p-6 shadow-xl">
-    <h2 class="font-heading text-2xl">Live SaaS Preview</h2>
-    <div class="rounded-xl border border-white/5 bg-white/5 p-4">
-      <lucide-icon [img]="ChartColumn" class="text-primary"></lucide-icon>
-      <p class="mt-2 text-sm text-slate-300">Inventory trend and daily movement</p>
+﻿<div class="mx-auto flex w-full max-w-5xl flex-col items-center justify-center lg:flex-row lg:gap-12 xl:gap-20">
+  
+  <!-- Showcase Section -->
+  <section class="hidden w-full flex-col justify-center space-y-8 lg:flex lg:w-1/2">
+    <div>
+      <h2 class="font-heading text-4xl font-bold leading-tight text-white tracking-tight">
+        Manage everything <br/>
+        <span class="bg-gradient-to-r from-primary to-accentLight bg-clip-text text-transparent">in one place.</span>
+      </h2>
+      <p class="mt-4 text-lg text-slate-400">Sign in to access your multi-tenant workspace, track inventory, and scale your business effortlessly.</p>
     </div>
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-      <div class="rounded-xl border border-white/5 bg-white/5 p-4"><lucide-icon [img]="Package" class="text-success"></lucide-icon><p class="mt-2 text-sm text-slate-300">Products</p></div>
-      <div class="rounded-xl border border-white/5 bg-white/5 p-4"><lucide-icon [img]="Bell" class="text-info"></lucide-icon><p class="mt-2 text-sm text-slate-300">Notifications</p></div>
+
+    <div class="relative group">
+      <div class="absolute -inset-1 rounded-card bg-gradient-to-r from-primary to-accent opacity-25 blur transition duration-500 group-hover:opacity-50"></div>
+      <div class="relative flex flex-col gap-4 rounded-card border border-white/10 bg-surface/80 p-6 backdrop-blur-xl">
+        <div class="flex items-center gap-4 rounded-xl border border-white/5 bg-white/5 p-4 transition-colors hover:bg-white/10">
+          <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/20 text-primary">
+            <lucide-icon [img]="ChartColumn"></lucide-icon>
+          </div>
+          <div>
+            <h3 class="font-semibold text-white">Live Insights</h3>
+            <p class="text-sm text-slate-400">Inventory trend & movement</p>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex items-center gap-3 rounded-xl border border-white/5 bg-white/5 p-4 transition-colors hover:bg-white/10">
+             <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-success/20 text-success">
+                <lucide-icon [img]="Package"></lucide-icon>
+             </div>
+             <p class="text-sm font-medium text-slate-300">Products</p>
+          </div>
+          <div class="flex items-center gap-3 rounded-xl border border-white/5 bg-white/5 p-4 transition-colors hover:bg-white/10">
+             <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-info/20 text-info">
+                <lucide-icon [img]="Bell"></lucide-icon>
+             </div>
+             <p class="text-sm font-medium text-slate-300">Alerts</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="rounded-card border border-white/5 bg-card p-6 shadow-xl">
-    <h1 class="font-heading text-3xl">Sign In</h1>
-    <form class="mt-6 space-y-6" [formGroup]="form" (ngSubmit)="submit()">
-      <app-input label="Username" formControlName="username" [error]="form.controls.username.touched && form.controls.username.invalid ? 'Username is required' : ''"></app-input>
-      <app-input label="Password" type="password" formControlName="password" [error]="form.controls.password.touched && form.controls.password.invalid ? 'Password must be at least 8 characters' : ''"></app-input>
-      <app-button type="submit" [block]="true" [disabled]="loading()">{{ loading() ? 'Signing In...' : 'Sign In' }}</app-button>
-      <div class="flex justify-between text-sm text-slate-400">
-        <a routerLink="/forgot-password" class="hover:text-white">Forgot Password</a>
-        <a routerLink="/register" class="hover:text-white">Register</a>
+  <!-- Login Form Section -->
+  <section class="w-full max-w-md lg:w-1/2">
+    <div class="relative">
+      <!-- Glow effect -->
+      <div class="absolute -inset-1 rounded-card bg-gradient-to-br from-primary/30 to-accent/30 blur-md"></div>
+      
+      <div class="relative rounded-card border border-white/10 bg-card/90 p-8 shadow-2xl backdrop-blur-xl sm:p-10">
+        <div class="mb-8 text-center lg:text-left">
+          <h1 class="font-heading text-3xl font-bold text-white tracking-tight">Welcome back</h1>
+          <p class="mt-2 text-sm text-slate-400">Please enter your details to sign in.</p>
+        </div>
+
+        <form class="space-y-5" [formGroup]="form" (ngSubmit)="submit()">
+          <app-input label="Username" formControlName="username" [error]="form.controls.username.touched && form.controls.username.invalid ? 'Username is required' : ''"></app-input>
+          
+          <div class="space-y-1">
+             <app-input label="Password" type="password" formControlName="password" [error]="form.controls.password.touched && form.controls.password.invalid ? 'Password must be at least 8 characters' : ''"></app-input>
+             <div class="flex justify-end pt-1">
+               <a routerLink="/forgot-password" class="text-xs font-medium text-primary transition-colors hover:text-accentLight">Forgot password?</a>
+             </div>
+          </div>
+
+          <button type="submit" [disabled]="loading()" class="group relative mt-4 flex w-full items-center justify-center gap-2 overflow-hidden rounded-button bg-primary px-6 py-3 font-semibold text-white transition-all hover:bg-primaryHover disabled:opacity-70 disabled:cursor-not-allowed">
+             <span class="absolute inset-0 h-full w-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></span>
+             <span class="relative">{{ loading() ? 'Signing In...' : 'Sign In' }}</span>
+          </button>
+          
+          <p class="mt-6 text-center text-sm text-slate-400">
+            Don't have an account? 
+            <a routerLink="/register" class="font-semibold text-primary transition-colors hover:text-accentLight">Register here</a>
+          </p>
+        </form>
       </div>
-    </form>
+    </div>
   </section>
 </div>

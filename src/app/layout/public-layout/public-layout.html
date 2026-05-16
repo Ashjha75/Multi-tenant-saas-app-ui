@@ -1,15 +1,21 @@
-<div class="app-page">
-  <app-navbar [isPublic]="true"></app-navbar>
-  <main class="mx-auto w-full max-w-[1280px] px-4 pb-14 pt-24 sm:px-6 lg:px-8">
+ï»¿<div class="flex min-h-screen flex-col relative overflow-hidden bg-background">
+  <!-- Subtle ambient background glows -->
+  <div class="pointer-events-none absolute left-0 top-[-10%] h-[500px] w-[500px] rounded-full bg-primary/10 blur-[120px]"></div>
+  <div class="pointer-events-none absolute right-[10%] top-[20%] h-[600px] w-[600px] rounded-full bg-accent/10 blur-[140px]"></div>
+
+  <app-navbar [isPublic]="true" class="relative z-10"></app-navbar>
+  
+  <main class="relative z-10 flex-1 mx-auto w-full max-w-[1280px] px-4 pb-14 pt-24 sm:px-6 lg:px-8">
     <router-outlet></router-outlet>
   </main>
-  <footer class="border-t border-border/70 bg-surface/40">
+
+  <footer class="relative z-10 border-t border-white/5 bg-surface/40 backdrop-blur-md">
     <div class="mx-auto flex w-full max-w-[1280px] flex-col gap-3 px-4 py-6 text-sm text-slate-400 sm:px-6 lg:px-8 md:flex-row md:items-center md:justify-between">
-      <p>© {{ 2026 }} StockFlow. Multi-tenant inventory platform.</p>
+      <p>&copy; 2026 StockFlow. Multi-tenant inventory platform.</p>
       <div class="flex items-center gap-4">
-        <a routerLink="/about" class="hover:text-white">About</a>
-        <a routerLink="/pricing" class="hover:text-white">Pricing</a>
-        <a routerLink="/contact" class="hover:text-white">Contact</a>
+        <a routerLink="/about" class="transition-colors hover:text-white">About</a>
+        <a routerLink="/pricing" class="transition-colors hover:text-white">Pricing</a>
+        <a routerLink="/contact" class="transition-colors hover:text-white">Contact</a>
       </div>
     </div>
   </footer>

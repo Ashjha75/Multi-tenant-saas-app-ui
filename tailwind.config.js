@@ -36,6 +36,14 @@ export default {
         card: '22px',
         modal: '28px',
       },
+      keyframes: {
+        shimmer: {
+          '100%': { transform: 'translateX(100%)' },
+        },
+      },
+      animation: {
+        shimmer: 'shimmer 1.5s infinite',
+      },
     },
   },
   plugins: [],

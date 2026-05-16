@@ -6,12 +6,32 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  token: string;
-  tenantId: string;
-  username: string;
-  role: AppRole;
+  token?: string;
+  accessToken?: string;
+  tenantId?: string;
+  username?: string;
+  role?: AppRole;
+  companyName?: string;
+  expiresAt?: string;
+}
+
+export interface RegisterTenantRequest {
   companyName: string;
-  expiresAt: string;
+  companyCode: string;
+  email: string;
+  industry: string;
+  companySize: string;
+  country: string;
+  adminFullName: string;
+  adminEmail: string;
+  adminUsername: string;
+  adminPassword: string;
+}
+
+export interface RegisterTenantResponse {
+  id?: string;
+  status?: string;
+  message?: string;
 }
 
 export interface JwtPayload {

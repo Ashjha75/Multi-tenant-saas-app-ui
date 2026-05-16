@@ -14,8 +14,11 @@ export const routes: Routes = [
         path: 'features',
         loadComponent: () => import('./features/public/features/features').then((m) => m.Features),
       },
-      { path: 'price', loadComponent: () => import('./features/public/pricing/pricing').then((m) => m.Pricing) },
-      { path: 'pricing', redirectTo: 'price', pathMatch: 'full' },
+      {
+        path: 'pricing',
+        loadComponent: () => import('./features/public/pricing/pricing').then((m) => m.Pricing),
+      },
+      { path: 'price', redirectTo: 'pricing', pathMatch: 'full' },
       { path: 'about', loadComponent: () => import('./features/public/about/about').then((m) => m.About) },
       {
         path: 'contact',
@@ -25,6 +28,11 @@ export const routes: Routes = [
       {
         path: 'register',
         loadComponent: () => import('./features/auth/register/register').then((m) => m.Register),
+      },
+      {
+        path: 'approval-status',
+        loadComponent: () =>
+          import('./features/auth/approval-status/approval-status').then((m) => m.ApprovalStatus),
       },
       {
         path: 'forgot-password',
@@ -37,8 +45,7 @@ export const routes: Routes = [
     path: 'portal',
     canActivate: [authGuard, roleGuard],
     data: { roles: [ROLES.platformAdmin] },
-    loadComponent: () =>
-      import('./layout/platform-layout/platform-layout').then((m) => m.PlatformLayout),
+    loadComponent: () => import('./layout/platform-layout/platform-layout').then((m) => m.PlatformLayout),
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       {
@@ -66,8 +73,7 @@ export const routes: Routes = [
   {
     path: 'workspace',
     canActivate: [authGuard, tenantGuard],
-    loadComponent: () =>
-      import('./layout/workspace-layout/workspace-layout').then((m) => m.WorkspaceLayout),
+    loadComponent: () => import('./layout/workspace-layout/workspace-layout').then((m) => m.WorkspaceLayout),
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       {

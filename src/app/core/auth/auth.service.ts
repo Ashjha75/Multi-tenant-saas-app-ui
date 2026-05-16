@@ -2,13 +2,19 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
-import { tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { API_ENDPOINTS } from '../constants/api.constants';
 import { STORAGE_KEYS } from '../constants/storage.constants';
 import { User } from '../models/user.model';
 import { StorageService } from '../services/storage.service';
-import { JwtPayload, LoginRequest, LoginResponse } from './auth.model';
+import {
+  JwtPayload,
+  LoginRequest,
+  LoginResponse,
+  RegisterTenantRequest,
+  RegisterTenantResponse,
+} from './auth.model';
 import { AuthStore } from './auth.store';
 
 @Injectable({ providedIn: 'root' })
@@ -24,8 +30,16 @@ export class AuthService {
 
   login(payload: LoginRequest) {
     return this.http.post<LoginResponse>(`${this.baseUrl}${API_ENDPOINTS.login}`, payload).pipe(
+      map((response) => {
+        const normalizedToken = response.token ?? response.accessToken ?? '';
+        return { ...response, token: normalizedToken };
+      }),
       tap((response) => this.persistSession(response)),
     );
+  }
+
+  registerTenant(payload: RegisterTenantRequest) {
+    return this.http.post<RegisterTenantResponse>(`${this.baseUrl}${API_ENDPOINTS.register}`, payload);
   }
 
   hydrateFromStorage(): void {
@@ -59,17 +73,20 @@ export class AuthService {
   }
 
   private persistSession(response: LoginResponse): void {
-    const decoded = jwtDecode<JwtPayload>(response.token);
+    const token = response.token ?? '';
+    if (!token) return;
+
+    const decoded = jwtDecode<JwtPayload>(token);
     const user: User = {
       username: response.username ?? decoded.sub ?? 'unknown',
       role: response.role ?? decoded.role ?? 'ROLE_USER',
-      tenantId: response.tenantId ?? decoded.tenantId ?? '',
+      tenantId: response.tenantId ?? decoded.tenantId ?? 'public',
       companyName: response.companyName ?? decoded.companyName,
       exp: decoded.exp,
     };
 
-    this.store.setAuth(response.token, user);
-    this.storage.set(STORAGE_KEYS.token, response.token);
+    this.store.setAuth(token, user);
+    this.storage.set(STORAGE_KEYS.token, token);
     this.storage.set(STORAGE_KEYS.tenantId, user.tenantId);
     this.storage.set(STORAGE_KEYS.user, user);
     this.storage.set(STORAGE_KEYS.role, user.role);

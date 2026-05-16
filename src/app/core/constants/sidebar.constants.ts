@@ -6,13 +6,6 @@ export const PLATFORM_SIDEBAR_ITEMS: SidebarItem[] = [
   
   // Administration Section
   { icon: 'refresh-cw', title: 'Pending Approvals', route: '/portal/approvals', roles: [ROLES.platformAdmin, ROLES.administrator], section: 'ADMINISTRATION' },
-  { icon: 'users', title: 'Tenants List', route: '/portal/tenants', roles: [ROLES.platformAdmin, ROLES.administrator], section: 'ADMINISTRATION' },
-  { icon: 'shield', title: 'Platform Users', route: '/portal/users', roles: [ROLES.platformAdmin, ROLES.administrator], section: 'ADMINISTRATION' },
-  
-  // System Section
-  { icon: 'chart', title: 'Analytics', route: '/portal/analytics', roles: [ROLES.platformAdmin, ROLES.administrator], section: 'SYSTEM' },
-  { icon: 'file-clock', title: 'Audit Logs', route: '/portal/audit', roles: [ROLES.platformAdmin, ROLES.administrator], section: 'SYSTEM' },
-  { icon: 'settings', title: 'Settings', route: '/portal/settings', roles: [ROLES.platformAdmin, ROLES.administrator], section: 'SYSTEM' },
 ];
 
 export const WORKSPACE_SIDEBAR_ITEMS: SidebarItem[] = [
@@ -23,6 +16,5 @@ export const WORKSPACE_SIDEBAR_ITEMS: SidebarItem[] = [
   { icon: 'users', title: 'Users', route: '/workspace/users' },
 
   // Administrative tools available in workspace for authorized roles
-  { icon: 'shield', title: 'Go to Admin Console', route: '/portal/dashboard', roles: [ROLES.platformAdmin, ROLES.administrator], section: 'ADMINISTRATION' },
   { icon: 'refresh-cw', title: 'Pending Approvals', route: '/portal/approvals', roles: [ROLES.platformAdmin, ROLES.administrator], section: 'ADMINISTRATION' },
 ];

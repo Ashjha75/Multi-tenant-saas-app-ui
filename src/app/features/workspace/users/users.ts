@@ -57,17 +57,17 @@ export class Users implements OnInit {
   disabledUsersCount = computed(() => this.users().filter(u => !u.enabled).length);
 
   roleOptions = [
-    { value: 'WORKSPACE_ADMIN', label: 'Workspace Administrator' },
-    { value: 'WAREHOUSE_MANAGER', label: 'Warehouse Manager' },
-    { value: 'SALES_REP', label: 'Sales Representative' },
-    { value: 'VIEWER', label: 'Viewer / Read-only' }
+    { value: 'ROLE_COMPANY_ADMIN', label: 'Role Company Admin' },
+    { value: 'ROLE_ADMINISTRATOR', label: 'Role Administrator' },
+    { value: 'ROLE_USER', label: 'Role User' },
+    { value: 'ROLE_SALES_OPERATOR', label: 'Role Sales Operator' }
   ];
 
   userForm = this.fb.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    role: ['VIEWER', Validators.required],
+    role: ['ROLE_USER', Validators.required],
     password: [''] // Only for creation
   });
 
@@ -110,7 +110,7 @@ export class Users implements OnInit {
       this.selectedUserId = null;
       this.modalTitle = 'Invite New User';
       this.modalAction = 'Invite';
-      this.userForm.reset({ role: 'VIEWER' });
+      this.userForm.reset({ role: 'ROLE_USER' });
       this.userForm.get('email')?.enable();
       this.userForm.get('password')?.enable();
     }
@@ -188,9 +188,10 @@ export class Users implements OnInit {
 
   getRoleBadgeClass(role: string) {
     switch (role) {
-      case 'WORKSPACE_ADMIN': return 'bg-purple-50 text-purple-700 border-purple-100';
-      case 'WAREHOUSE_MANAGER': return 'bg-blue-50 text-blue-700 border-blue-100';
-      case 'SALES_REP': return 'bg-orange-50 text-orange-700 border-orange-100';
+      case 'ROLE_PLATFORM_ADMIN': return 'bg-purple-50 text-purple-700 border-purple-100';
+      case 'ROLE_COMPANY_ADMIN': return 'bg-blue-50 text-blue-700 border-blue-100';
+      case 'ROLE_ADMINISTRATOR': return 'bg-orange-50 text-orange-700 border-orange-100';
+      case 'ROLE_SALES_OPERATOR': return 'bg-green-50 text-green-700 border-green-100';
       default: return 'bg-slate-50 text-slate-700 border-slate-100';
     }
   }

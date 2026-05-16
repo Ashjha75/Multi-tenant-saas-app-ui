@@ -52,6 +52,14 @@ export class AuthService {
   }
 
   logout(redirectToLogin = true): void {
+    // Call server-side logout first
+    this.http.post(`${this.baseUrl}/auth/logout`, {}).subscribe({
+      next: () => this.finalizeLogout(redirectToLogin),
+      error: () => this.finalizeLogout(redirectToLogin) // Clear local state anyway
+    });
+  }
+
+  private finalizeLogout(redirectToLogin: boolean): void {
     this.store.clear();
     this.storage.remove(STORAGE_KEYS.token);
     this.storage.remove(STORAGE_KEYS.tenantId);

@@ -20,7 +20,7 @@ import { LucideAngularModule, Eye, EyeOff } from 'lucide-angular';
 export class Input implements ControlValueAccessor {
   readonly label = input('');
   readonly id = input('');
-  readonly type = input<'text' | 'password' | 'email' | 'number'>('text');
+  readonly type = input<'text' | 'password' | 'email' | 'number' | 'date'>('text');
   readonly placeholder = input('');
   readonly hint = input('');
   readonly error = input('');

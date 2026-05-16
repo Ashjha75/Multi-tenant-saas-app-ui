@@ -19,9 +19,7 @@ export interface RegisterTenantRequest {
   companyName: string;
   companyCode: string;
   email: string;
-  industry: string;
-  companySize: string;
-  country: string;
+
   adminFullName: string;
   adminEmail: string;
   adminUsername: string;

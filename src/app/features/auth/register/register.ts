@@ -58,9 +58,20 @@ export class Register {
       return;
     }
 
+    const rawValue = this.registerForm.getRawValue();
+    const payload = {
+      companyName: rawValue.companyName ?? '',
+      companyCode: rawValue.companyCode ?? '',
+      email: rawValue.email ?? '',
+      adminFullName: rawValue.adminFullName ?? '',
+      adminUsername: rawValue.adminUsername ?? '',
+      adminEmail: rawValue.adminEmail ?? '',
+      adminPassword: rawValue.adminPassword ?? ''
+    };
+
     this.loading.set(true);
     this.authService
-      .registerTenant(this.registerForm.getRawValue())
+      .registerTenant(payload)
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
         next: () => {

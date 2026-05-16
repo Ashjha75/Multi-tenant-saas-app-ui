@@ -5,6 +5,7 @@ import { LucideAngularModule, FolderPlus, Edit, Trash2, Smartphone, Monitor, Hea
 import { PageHeader } from '../../../shared/components/page-header/page-header';
 import { Button } from '../../../shared/components/button/button';
 import { Input } from '../../../shared/components/input/input';
+import { ConfirmDialog } from '../../../shared/components/confirm-dialog/confirm-dialog';
 import { CategoryService } from '../../../core/services/category.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { finalize } from 'rxjs';
@@ -12,7 +13,7 @@ import { finalize } from 'rxjs';
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, PageHeader, Input],
+  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, PageHeader, Input, ConfirmDialog],
   templateUrl: './categories.html'
 })
 export class Categories implements OnInit {
@@ -144,18 +145,35 @@ export class Categories implements OnInit {
     }
   }
 
+  showConfirmDialog = false;
+  categoryToDelete: string | null = null;
+
   deleteCategory(id: string) {
-    if (!confirm('Are you sure you want to delete this category?')) return;
-    
+    this.categoryToDelete = id;
+    this.showConfirmDialog = true;
+  }
+
+  confirmDelete() {
+    if (!this.categoryToDelete) return;
+    this.showConfirmDialog = false;
     this.isLoading = true;
-    this.categoryService.deleteCategory(id).pipe(
+    this.categoryService.deleteCategory(this.categoryToDelete).pipe(
       finalize(() => this.isLoading = false)
     ).subscribe({
       next: () => {
         this.notifier.success('Category deleted');
+        this.categoryToDelete = null;
         this.loadCategories();
       },
-      error: () => this.notifier.error('Failed to delete category')
+      error: () => {
+        this.notifier.error('Failed to delete category');
+        this.categoryToDelete = null;
+      }
     });
+  }
+
+  cancelDelete() {
+    this.showConfirmDialog = false;
+    this.categoryToDelete = null;
   }
 }

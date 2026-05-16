@@ -1,1 +1,27 @@
-<p>contact works!</p>
+<app-page-header title="Contact" subtitle="Talk to product, support, or onboarding specialists."></app-page-header>
+
+<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+  <section class="space-y-6 rounded-card border border-white/5 bg-card p-6 shadow-xl">
+    <h2 class="font-heading text-xl">Contact Details</h2>
+    <p class="text-sm text-slate-300">support@stockflow.app · +1 800 555 0101</p>
+    <div class="space-y-3 text-sm text-slate-300">
+      <div class="rounded-xl border border-white/5 bg-white/5 p-4">Priority support for tenant onboarding</div>
+      <div class="rounded-xl border border-white/5 bg-white/5 p-4">Architecture and integration guidance</div>
+      <div class="rounded-xl border border-white/5 bg-white/5 p-4">Security and compliance assistance</div>
+    </div>
+  </section>
+
+  <section class="rounded-card border border-white/5 bg-card p-6 shadow-xl">
+    @if (loading()) {
+      <ngx-skeleton-loader count="4" appearance="line"></ngx-skeleton-loader>
+    } @else {
+      <form class="space-y-6" [formGroup]="form" (ngSubmit)="submit()">
+        <app-input label="Name" formControlName="name" [error]="form.controls.name.touched && form.controls.name.invalid ? 'Name is required' : ''"></app-input>
+        <app-input label="Email" formControlName="email" [error]="form.controls.email.touched && form.controls.email.invalid ? 'Enter a valid email' : ''"></app-input>
+        <app-input label="Company" formControlName="company" [error]="form.controls.company.touched && form.controls.company.invalid ? 'Company is required' : ''"></app-input>
+        <app-input label="Message" formControlName="message" [error]="form.controls.message.touched && form.controls.message.invalid ? 'Minimum 10 characters required' : ''"></app-input>
+        <app-button type="submit" [block]="true">Send Message</app-button>
+      </form>
+    }
+  </section>
+</div>

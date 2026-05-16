@@ -1,1 +1,26 @@
-<p>login works!</p>
+<div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+  <section class="space-y-4 rounded-card border border-white/5 bg-card p-6 shadow-xl">
+    <h2 class="font-heading text-2xl">Live SaaS Preview</h2>
+    <div class="rounded-xl border border-white/5 bg-white/5 p-4">
+      <lucide-icon [img]="ChartColumn" class="text-primary"></lucide-icon>
+      <p class="mt-2 text-sm text-slate-300">Inventory trend and daily movement</p>
+    </div>
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div class="rounded-xl border border-white/5 bg-white/5 p-4"><lucide-icon [img]="Package" class="text-success"></lucide-icon><p class="mt-2 text-sm text-slate-300">Products</p></div>
+      <div class="rounded-xl border border-white/5 bg-white/5 p-4"><lucide-icon [img]="Bell" class="text-info"></lucide-icon><p class="mt-2 text-sm text-slate-300">Notifications</p></div>
+    </div>
+  </section>
+
+  <section class="rounded-card border border-white/5 bg-card p-6 shadow-xl">
+    <h1 class="font-heading text-3xl">Sign In</h1>
+    <form class="mt-6 space-y-6" [formGroup]="form" (ngSubmit)="submit()">
+      <app-input label="Username" formControlName="username" [error]="form.controls.username.touched && form.controls.username.invalid ? 'Username is required' : ''"></app-input>
+      <app-input label="Password" type="password" formControlName="password" [error]="form.controls.password.touched && form.controls.password.invalid ? 'Password must be at least 8 characters' : ''"></app-input>
+      <app-button type="submit" [block]="true" [disabled]="loading()">{{ loading() ? 'Signing In...' : 'Sign In' }}</app-button>
+      <div class="flex justify-between text-sm text-slate-400">
+        <a routerLink="/forgot-password" class="hover:text-white">Forgot Password</a>
+        <a routerLink="/register" class="hover:text-white">Register</a>
+      </div>
+    </form>
+  </section>
+</div>

@@ -135,7 +135,7 @@
 
 <!-- Confirm Dialog -->
 <app-confirm-dialog
-  [show]="showConfirm"
+  [open]="showConfirm"
   [title]="confirmType === 'approve' ? 'Approve Workspace' : 'Reject Workspace'"
   [message]="confirmType === 'approve' 
     ? 'Are you sure you want to approve and provision the workspace for ' + selectedTenant?.companyName + '?' 

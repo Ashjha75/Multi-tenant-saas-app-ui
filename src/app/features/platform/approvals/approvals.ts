@@ -4,13 +4,12 @@ import { LucideAngularModule, Building2, Check, X, Eye, Search, Filter, AlertCir
 import { TenantService } from '../../../core/services/tenant.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { finalize } from 'rxjs';
-import { StatusBadge } from '../../../shared/components/status-badge/status-badge';
 import { ConfirmDialog } from '../../../shared/components/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-approvals',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, StatusBadge, ConfirmDialog],
+  imports: [CommonModule, LucideAngularModule, ConfirmDialog],
   templateUrl: './approvals.html',
 })
 export class Approvals implements OnInit {

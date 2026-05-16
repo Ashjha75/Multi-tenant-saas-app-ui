@@ -29,7 +29,6 @@ export const routes: Routes = [
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       { path: 'dashboard', loadComponent: () => import('./features/platform/dashboard/dashboard').then((m) => m.Dashboard) },
-      { path: 'approvals', loadComponent: () => import('./features/platform/approvals/approvals').then((m) => m.Approvals) },
       { path: 'tenants', loadComponent: () => import('./features/platform/tenants/tenants').then((m) => m.Tenants) },
       { path: 'tenants/:id', loadComponent: () => import('./features/platform/tenants/tenant-detail/tenant-detail').then((m) => m.TenantDetail) },
       { path: 'users', loadComponent: () => import('./features/platform/users/users').then((m) => m.Users) },
@@ -55,6 +54,12 @@ export const routes: Routes = [
       { path: 'users', loadComponent: () => import('./features/workspace/users/users').then((m) => m.Users) },
       { path: 'settings', loadComponent: () => import('./features/workspace/settings/settings').then((m) => m.Settings) },
       { path: 'profile', loadComponent: () => import('./features/workspace/profile/profile').then((m) => m.Profile) },
+      {
+        path: 'approvals',
+        canActivate: [roleGuard],
+        data: { roles: [ROLES.platformAdmin, ROLES.administrator] },
+        loadComponent: () => import('./features/platform/approvals/approvals').then((m) => m.Approvals)
+      },
     ],
   },
   { path: '**', redirectTo: '' },

@@ -3,9 +3,8 @@ import { SidebarItem } from '../models/sidebar-item.model';
 
 export const PLATFORM_SIDEBAR_ITEMS: SidebarItem[] = [
   { icon: 'layout', title: 'Dashboard', route: '/portal/dashboard', roles: [ROLES.platformAdmin, ROLES.administrator] },
-  
-  // Administration Section
-  { icon: 'refresh-cw', title: 'Pending Approvals', route: '/portal/approvals', roles: [ROLES.platformAdmin, ROLES.administrator], section: 'ADMINISTRATION' },
+  { icon: 'users', title: 'Tenants List', route: '/portal/tenants', roles: [ROLES.platformAdmin, ROLES.administrator] },
+  { icon: 'shield', title: 'Platform Users', route: '/portal/users', roles: [ROLES.platformAdmin, ROLES.administrator] },
 ];
 
 export const WORKSPACE_SIDEBAR_ITEMS: SidebarItem[] = [
@@ -15,6 +14,12 @@ export const WORKSPACE_SIDEBAR_ITEMS: SidebarItem[] = [
   { icon: 'refresh-cw', title: 'Stock Movements', route: '/workspace/stock' },
   { icon: 'users', title: 'Users', route: '/workspace/users' },
 
-  // Administrative tools available in workspace for authorized roles
-  { icon: 'refresh-cw', title: 'Pending Approvals', route: '/portal/approvals', roles: [ROLES.platformAdmin, ROLES.administrator], section: 'ADMINISTRATION' },
+  // Administrative tools integrated into normal workspace flow
+  { 
+    icon: 'refresh-cw', 
+    title: 'Pending Approvals', 
+    route: '/workspace/approvals', 
+    roles: [ROLES.platformAdmin, ROLES.administrator], 
+    section: 'ADMINISTRATION' 
+  },
 ];

@@ -27,9 +27,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([tenantInterceptor, authInterceptor, loadingInterceptor, errorInterceptor]),
     ),
-    provideAppInitializer(() => {
-      const authService = inject(AuthService);
-      return () => authService.hydrateFromStorage();
-    }),
+    provideAppInitializer(() => inject(AuthService).hydrateFromStorage()),
   ],
 };

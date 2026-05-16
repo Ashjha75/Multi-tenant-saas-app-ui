@@ -1,22 +1,23 @@
-@import url(''https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap'');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 @import "tailwindcss";
+@config "../tailwind.config.js";
 
 :root {
-  --bg: #0B1020;
+  --bg: #0b1020;
   --surface: #111827;
-  --card: #151C2F;
-  --card-hover: #1E293B;
-  --primary: #7C3AED;
-  --primary-hover: #8B5CF6;
-  --success: #10B981;
-  --danger: #EF4444;
-  --warning: #F59E0B;
-  --text: #F8FAFC;
-  --text-muted: #94A3B8;
+  --card: #151c2f;
+  --card-hover: #1e293b;
+  --primary: #7c3aed;
+  --primary-hover: #8b5cf6;
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --text: #f8fafc;
+  --text-muted: #94a3b8;
   --border: #273449;
-  --hero-gradient: linear-gradient(135deg, #0B1020, #141B35, #1E1B4B);
-  --button-gradient: linear-gradient(90deg, #7C3AED, #A855F7);
-  --card-gradient: linear-gradient(145deg, #151C2F, #1E293B);
+  --hero-gradient: linear-gradient(135deg, #0b1020, #141b35, #1e1b4b);
+  --button-gradient: linear-gradient(90deg, #7c3aed, #a855f7);
+  --card-gradient: linear-gradient(145deg, #151c2f, #1e293b);
 }
 
 html,
@@ -43,15 +44,33 @@ body {
 }
 
 .app-page {
-  @apply min-h-screen bg-background text-slate-50;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
 }
 
 .app-section {
-  @apply rounded-[20px] border border-border bg-card p-6 shadow-card;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--card);
+  padding: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .app-input {
-  @apply h-[52px] w-full rounded-[14px] border border-border bg-card px-4 text-slate-100 placeholder:text-slate-400 outline-none transition;
+  height: 52px;
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  padding: 0 16px;
+  color: #f1f5f9;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.app-input::placeholder {
+  color: #94a3b8;
 }
 
 .app-input:focus {

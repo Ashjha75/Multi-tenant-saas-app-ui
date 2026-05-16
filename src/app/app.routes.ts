@@ -1,4 +1,4 @@
-﻿import { Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { ROLES } from './core/constants/role.constants';
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
@@ -45,12 +45,15 @@ export const routes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       { path: 'dashboard', loadComponent: () => import('./features/workspace/dashboard/dashboard').then((m) => m.Dashboard) },
       { path: 'products', loadComponent: () => import('./features/workspace/products/products').then((m) => m.Products) },
+      { path: 'products/:id', loadComponent: () => import('./features/workspace/products/product-detail/product-detail').then((m) => m.ProductDetail) },
       { path: 'categories', loadComponent: () => import('./features/workspace/categories/categories').then((m) => m.Categories) },
       { path: 'stock', loadComponent: () => import('./features/workspace/stock/stock').then((m) => m.Stock) },
       { path: 'inventory', loadComponent: () => import('./features/workspace/inventory/inventory').then((m) => m.Inventory) },
       { path: 'reports', loadComponent: () => import('./features/workspace/reports/reports').then((m) => m.Reports) },
       { path: 'notifications', loadComponent: () => import('./features/workspace/notifications/notifications').then((m) => m.Notifications) },
+      { path: 'users', loadComponent: () => import('./features/workspace/users/users').then((m) => m.Users) },
       { path: 'settings', loadComponent: () => import('./features/workspace/settings/settings').then((m) => m.Settings) },
+      { path: 'profile', loadComponent: () => import('./features/workspace/profile/profile').then((m) => m.Profile) },
     ],
   },
   { path: '**', redirectTo: '' },

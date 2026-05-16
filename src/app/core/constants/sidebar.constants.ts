@@ -18,5 +18,6 @@ export const WORKSPACE_SIDEBAR_ITEMS: SidebarItem[] = [
   { icon: 'refresh-cw', title: 'Stock Movement', route: '/workspace/stock' },
   { icon: 'file-text', title: 'Reports', route: '/workspace/reports' },
   { icon: 'bell', title: 'Notifications', route: '/workspace/notifications' },
+  { icon: 'users', title: 'Users', route: '/workspace/users' },
   { icon: 'settings', title: 'Settings', route: '/workspace/settings' },
 ];

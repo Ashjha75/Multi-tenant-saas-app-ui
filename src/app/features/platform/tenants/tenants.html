@@ -1,1 +1,107 @@
-<p>tenants works!</p>
+<div class="space-y-6">
+  <div class="flex items-center justify-between mb-8">
+    <app-page-header title="Tenant Registry" subtitle="Manage and provision all tenant workspaces"></app-page-header>
+    <div class="flex items-center gap-3">
+      <button class="flex items-center gap-2 rounded-button border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50">
+        <lucide-icon [img]="Download" class="h-4 w-4"></lucide-icon> Export
+      </button>
+      <button class="flex items-center gap-2 rounded-button bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-primaryHover">
+        <lucide-icon [img]="Plus" class="h-4 w-4"></lucide-icon> Add Tenant
+      </button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-4 gap-4">
+    <div class="rounded-[24px] border border-slate-200 bg-white p-4 shadow-sm flex items-center justify-between">
+      <span class="text-sm font-medium text-slate-500">All</span>
+      <span class="text-xl font-bold text-slate-900">124</span>
+    </div>
+    <div class="rounded-[24px] border border-slate-200 bg-white p-4 shadow-sm flex items-center justify-between">
+      <span class="text-sm font-medium text-slate-500">Pending</span>
+      <span class="text-xl font-bold text-slate-900">18</span>
+    </div>
+    <div class="rounded-[24px] border border-slate-200 bg-white p-4 shadow-sm flex items-center justify-between">
+      <span class="text-sm font-medium text-slate-500">Approved</span>
+      <span class="text-xl font-bold text-slate-900">98</span>
+    </div>
+    <div class="rounded-[24px] border border-slate-200 bg-white p-4 shadow-sm flex items-center justify-between">
+      <span class="text-sm font-medium text-slate-500">Suspended</span>
+      <span class="text-xl font-bold text-slate-900">8</span>
+    </div>
+  </div>
+
+  <div class="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+    <form class="grid grid-cols-1 gap-4 md:grid-cols-4 mb-6" [formGroup]="filterForm">
+      <app-input placeholder="Search company..." formControlName="search"></app-input>
+      <app-select [options]="statusOptions" formControlName="status"></app-select>
+      <app-input type="date" placeholder="Date range" formControlName="dateRange"></app-input>
+      <app-input placeholder="Company code" formControlName="companyCode"></app-input>
+    </form>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm text-slate-600">
+        <thead class="bg-slate-50 font-medium text-slate-700">
+          <tr>
+            @for (col of columns; track col.key) {
+              <th class="px-4 py-3">{{ col.label }}</th>
+            }
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          @for (row of data; track row.code) {
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="px-4 py-4 font-medium text-slate-900">{{ row.company }}</td>
+              <td class="px-4 py-4">{{ row.code }}</td>
+              <td class="px-4 py-4">{{ row.admin }}</td>
+              <td class="px-4 py-4">{{ row.email }}</td>
+              <td class="px-4 py-4">{{ row.users }}</td>
+              <td class="px-4 py-4">{{ row.createdAt }}</td>
+              <td class="px-4 py-4">
+                <app-status-badge [status]="row.status"></app-status-badge>
+              </td>
+              <td class="px-4 py-4">
+                <div class="flex items-center gap-2">
+                  <button class="p-1 text-slate-400 hover:text-primary transition-colors" title="View"><lucide-icon [img]="Eye" class="h-4 w-4"></lucide-icon></button>
+                  @if (row.status === 'pending') {
+                    <button class="p-1 text-slate-400 hover:text-success transition-colors" title="Approve" (click)="openApproveModal()"><lucide-icon [img]="Check" class="h-4 w-4"></lucide-icon></button>
+                  }
+                  @if (row.status === 'suspended') {
+                    <button class="p-1 text-slate-400 hover:text-primary transition-colors" title="Activate"><lucide-icon [img]="Play" class="h-4 w-4"></lucide-icon></button>
+                  }
+                  @if (row.status === 'active') {
+                    <button class="p-1 text-slate-400 hover:text-warning transition-colors" title="Suspend"><lucide-icon [img]="Pause" class="h-4 w-4"></lucide-icon></button>
+                  }
+                  <button class="p-1 text-slate-400 hover:text-slate-700 transition-colors" title="More options"><lucide-icon [img]="MoreVertical" class="h-4 w-4"></lucide-icon></button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+@if (showApproveModal) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm animate-fade-in">
+    <div class="w-full max-w-md rounded-[24px] bg-white p-6 shadow-2xl">
+      <h3 class="font-heading text-xl font-bold text-slate-900">Approve Tenant</h3>
+      <p class="mt-2 text-sm text-slate-600">Approving will create tenant workspace and provision resources.</p>
+      
+      @if (isApproving) {
+        <div class="my-8 flex flex-col items-center justify-center gap-4">
+          <svg class="animate-spin h-8 w-8 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <p class="text-sm font-medium text-slate-600">Provisioning workspace...</p>
+        </div>
+      } @else {
+        <div class="mt-8 flex justify-end gap-3">
+          <button class="rounded-button border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50" (click)="closeApproveModal()">Cancel</button>
+          <button class="rounded-button bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primaryHover" (click)="approveTenant()">Approve</button>
+        </div>
+      }
+    </div>
+  </div>
+}

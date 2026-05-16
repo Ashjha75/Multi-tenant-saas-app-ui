@@ -1,0 +1,198 @@
+<div class="space-y-6">
+  <!-- Header Section -->
+  <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
+    <app-page-header title="Team Members" subtitle="Manage user access and roles within your workspace"></app-page-header>
+    <button class="flex items-center gap-2 rounded-button bg-primary px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:bg-primaryHover hover:scale-[1.02] active:scale-[0.98]" (click)="openModal()">
+      <lucide-icon [img]="UserPlus" class="h-4 w-4"></lucide-icon> Invite Member
+    </button>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+    <div class="rounded-[32px] border border-slate-100 bg-white p-6 shadow-sm transition-all hover:shadow-md">
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+          <lucide-icon [img]="User" class="h-6 w-6"></lucide-icon>
+        </div>
+      </div>
+      <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">Total Members</p>
+      <h3 class="text-3xl font-black text-slate-900 mt-1">{{ totalUsers() }}</h3>
+    </div>
+
+    <div class="rounded-[32px] border border-slate-100 bg-white p-6 shadow-sm transition-all hover:shadow-md">
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-green-50 text-green-600">
+          <lucide-icon [img]="UserCheck" class="h-6 w-6"></lucide-icon>
+        </div>
+      </div>
+      <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">Active Now</p>
+      <h3 class="text-3xl font-black text-slate-900 mt-1">{{ activeUsersCount() }}</h3>
+    </div>
+
+    <div class="rounded-[32px] border border-slate-100 bg-white p-6 shadow-sm transition-all hover:shadow-md">
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-50 text-purple-600">
+          <lucide-icon [img]="ShieldCheck" class="h-6 w-6"></lucide-icon>
+        </div>
+      </div>
+      <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">Admins</p>
+      <h3 class="text-3xl font-black text-slate-900 mt-1">{{ adminUsersCount() }}</h3>
+    </div>
+
+    <div class="rounded-[32px] border border-slate-100 bg-white p-6 shadow-sm transition-all hover:shadow-md">
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 text-red-600">
+          <lucide-icon [img]="UserX" class="h-6 w-6"></lucide-icon>
+        </div>
+      </div>
+      <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">Disabled</p>
+      <h3 class="text-3xl font-black text-slate-900 mt-1">{{ disabledUsersCount() }}</h3>
+    </div>
+  </div>
+
+  <!-- Table Section -->
+  <div class="rounded-[24px] border border-slate-200 bg-white overflow-hidden shadow-sm">
+    <div class="relative overflow-x-auto min-h-[400px]">
+      @if (isLoading) {
+        <div class="absolute inset-0 z-10 flex items-center justify-center bg-white/60 backdrop-blur-[2px] transition-all">
+          <div class="flex flex-col items-center gap-3">
+            <div class="h-12 w-12 animate-spin rounded-full border-4 border-slate-200 border-t-primary"></div>
+            <p class="text-sm font-bold text-primary uppercase tracking-widest animate-pulse">Syncing Team Data...</p>
+          </div>
+        </div>
+      }
+      <table class="w-full text-left text-sm text-slate-600">
+        <thead class="bg-slate-50 font-bold text-slate-900 border-b border-slate-100">
+          <tr>
+            <th class="px-6 py-4">User Details</th>
+            <th class="px-6 py-4">Role</th>
+            <th class="px-6 py-4 text-center">Status</th>
+            <th class="px-6 py-4 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          @for (user of users(); track user.id) {
+            <tr class="hover:bg-slate-50/50 transition-colors group">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center gap-3">
+                  <div class="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 font-bold border border-slate-200">
+                    {{ user.firstName[0] }}{{ user.lastName[0] }}
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="font-bold text-slate-900 text-base">{{ user.firstName }} {{ user.lastName }}</span>
+                    <span class="text-xs text-slate-400 flex items-center gap-1">
+                      <lucide-icon [img]="Mail" class="h-3 w-3"></lucide-icon>
+                      {{ user.email }}
+                    </span>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <span 
+                  [class]="getRoleBadgeClass(user.role)"
+                  class="inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-bold">
+                  <lucide-icon [img]="Shield" class="h-3 w-3"></lucide-icon>
+                  {{ user.role.replace('_', ' ') }}
+                </span>
+              </td>
+              <td class="px-6 py-4 text-center">
+                <button (click)="toggleStatus(user)" 
+                  class="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold transition-all border"
+                  [class]="user.enabled ? 'bg-green-50 text-green-700 border-green-100 hover:bg-green-100' : 'bg-slate-100 text-slate-400 border-slate-200 hover:bg-slate-200'">
+                  <div class="h-1.5 w-1.5 rounded-full" [class]="user.enabled ? 'bg-green-500 animate-pulse' : 'bg-slate-300'"></div>
+                  {{ user.enabled ? 'Active' : 'Disabled' }}
+                </button>
+              </td>
+              <td class="px-6 py-4 text-right">
+                <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button (click)="openModal(user)" class="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-primary/5 transition-all" title="Edit">
+                    <lucide-icon [img]="Edit" class="h-4 w-4"></lucide-icon>
+                  </button>
+                  <button (click)="deleteUser(user.id)" class="p-2 rounded-lg text-slate-400 hover:text-danger hover:bg-danger/5 transition-all" title="Delete">
+                    <lucide-icon [img]="Trash2" class="h-4 w-4"></lucide-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="4" class="px-6 py-20 text-center">
+                <div class="flex flex-col items-center gap-3">
+                  <div class="h-16 w-16 rounded-full bg-slate-50 flex items-center justify-center text-slate-200">
+                    <lucide-icon [img]="User" class="h-8 w-8"></lucide-icon>
+                  </div>
+                  <h3 class="text-lg font-bold text-slate-900">No team members yet</h3>
+                  <p class="text-sm text-slate-500">Invite colleagues to collaborate in this workspace.</p>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    @if (totalItems() > 0) {
+      <div class="border-t border-slate-100 bg-slate-50/50 p-4 flex items-center justify-between">
+        <span class="text-sm text-slate-500">
+          Showing <strong>{{ (currentPage() - 1) * pageSize() + 1 }}</strong> to 
+          <strong>{{ Math.min(currentPage() * pageSize(), totalItems()) }}</strong> of 
+          <strong>{{ totalItems() }}</strong> members
+        </span>
+        <div class="flex gap-2">
+          <button 
+            [disabled]="currentPage() === 1"
+            (click)="onPageChange(currentPage() - 1)"
+            class="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-600 shadow-sm transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
+            Previous
+          </button>
+          <button 
+            [disabled]="currentPage() * pageSize() >= totalItems()"
+            (click)="onPageChange(currentPage() + 1)"
+            class="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-600 shadow-sm transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
+            Next
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- User Modal -->
+<app-modal [open]="showModal" [title]="modalTitle" (close)="closeModal()">
+  <div class="p-1 space-y-6" [formGroup]="userForm">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <app-input label="First Name *" formControlName="firstName" placeholder="e.g. John"></app-input>
+      <app-input label="Last Name *" formControlName="lastName" placeholder="e.g. Doe"></app-input>
+      
+      <div class="md:col-span-2">
+        <app-input label="Email Address *" type="email" formControlName="email" placeholder="john.doe@company.com"></app-input>
+      </div>
+
+      @if (!selectedUserId) {
+        <div class="md:col-span-2">
+          <app-input label="Temporary Password *" type="password" formControlName="password" placeholder="••••••••"></app-input>
+        </div>
+      }
+
+      <div class="md:col-span-2">
+        <app-select label="Assign Role *" formControlName="role" [options]="roleOptions"></app-select>
+      </div>
+    </div>
+
+    <div class="mt-8 flex justify-end gap-3 border-t border-slate-100 pt-6">
+      <button class="px-6 py-3 rounded-xl border border-slate-200 text-slate-600 font-bold hover:bg-slate-50 transition-all" (click)="closeModal()">Cancel</button>
+      <button class="px-8 py-3 rounded-xl bg-primary text-white font-bold shadow-lg shadow-primary/20 hover:bg-primaryHover transition-all hover:scale-[1.02] active:scale-[0.98]" (click)="saveUser()">
+        {{ modalAction }}
+      </button>
+    </div>
+  </div>
+</app-modal>
+
+<app-confirm-dialog
+  [open]="showConfirmDialog"
+  title="Remove Team Member"
+  message="Are you sure you want to remove this user? They will lose all access to this workspace immediately."
+  (confirm)="confirmDelete()"
+  (cancel)="cancelDelete()">
+</app-confirm-dialog>

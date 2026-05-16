@@ -2,7 +2,9 @@
   <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
     <app-page-header title="Categories" subtitle="Manage product taxonomy and organization"></app-page-header>
     <div class="flex items-center gap-3">
-      <button class="flex items-center gap-2 rounded-button bg-primary px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:bg-primaryHover hover:scale-[1.02] active:scale-[0.98]" (click)="openModal()">
+      <button
+        class="flex items-center gap-2 rounded-button bg-primary px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:bg-primaryHover hover:scale-[1.02] active:scale-[0.98]"
+        (click)="openModal()">
         <lucide-icon [img]="FolderPlus" class="h-4 w-4"></lucide-icon> Create Category
       </button>
     </div>
@@ -10,79 +12,85 @@
 
   <div class="relative min-h-[300px]">
     @if (isLoading) {
-      <div class="absolute inset-0 z-10 flex items-center justify-center bg-[#f8f8f8]/60 backdrop-blur-[2px] transition-all rounded-[32px]">
-        <div class="flex flex-col items-center gap-3">
-          <div class="h-12 w-12 animate-spin rounded-full border-4 border-slate-200 border-t-primary"></div>
-          <p class="text-sm font-bold text-primary uppercase tracking-widest animate-pulse">Updating...</p>
-        </div>
+    <div
+      class="absolute inset-0 z-10 flex items-center justify-center bg-[#f8f8f8]/60 backdrop-blur-[2px] transition-all rounded-[32px]">
+      <div class="flex flex-col items-center gap-3">
+        <div class="h-12 w-12 animate-spin rounded-full border-4 border-slate-200 border-t-primary"></div>
+        <p class="text-sm font-bold text-primary uppercase tracking-widest animate-pulse">Updating...</p>
       </div>
+    </div>
     }
 
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       @for (category of categories(); track category.id) {
-        <div class="group relative rounded-[32px] border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-xl hover:border-primary/20 hover:-translate-y-1">
-          <div class="absolute right-6 top-6 flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
-            <button class="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-slate-400 shadow-md border border-slate-100 hover:text-primary transition-all hover:scale-110" (click)="editCategory(category)" title="Edit">
-              <lucide-icon [img]="Edit" class="h-4 w-4"></lucide-icon>
-            </button>
-            <button class="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-slate-400 shadow-md border border-slate-100 hover:text-danger transition-all hover:scale-110" (click)="deleteCategory(category.id)" title="Delete">
-              <lucide-icon [img]="Trash2" class="h-4 w-4"></lucide-icon>
-            </button>
-          </div>
+      <div
+        class="group relative rounded-[32px] border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-xl hover:border-primary/20 hover:-translate-y-1">
+        <div class="absolute right-6 top-6 flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+          <button
+            class="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-slate-400 shadow-md border border-slate-100 hover:text-primary transition-all hover:scale-110"
+            (click)="editCategory(category)" title="Edit">
+            <lucide-icon [img]="Edit" class="h-4 w-4"></lucide-icon>
+          </button>
+          <button
+            class="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-slate-400 shadow-md border border-slate-100 hover:text-danger transition-all hover:scale-110"
+            (click)="deleteCategory(category.id)" title="Delete">
+            <lucide-icon [img]="Trash2" class="h-4 w-4"></lucide-icon>
+          </button>
+        </div>
 
-          <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-[24px] bg-primary/5 text-primary border border-primary/10 shadow-inner group-hover:bg-primary group-hover:text-white transition-all duration-300">
-            <lucide-icon [img]="getIcon(category.icon)" class="h-8 w-8"></lucide-icon>
-          </div>
+        <div
+          class="mb-6 flex h-16 w-16 items-center justify-center rounded-[24px] bg-primary/5 text-primary border border-primary/10 shadow-inner group-hover:bg-primary group-hover:text-white transition-all duration-300">
+          <lucide-icon [img]="getIcon(category.icon)" class="h-8 w-8"></lucide-icon>
+        </div>
 
-          <h3 class="mb-2 font-heading text-xl font-black text-slate-900 group-hover:text-primary transition-colors">{{ category.name }}</h3>
-          <p class="mb-6 text-sm text-slate-500 leading-relaxed line-clamp-2 h-10">{{ category.description || 'No description provided for this category.' }}</p>
+        <h3 class="mb-2 font-heading text-xl font-black text-slate-900 group-hover:text-primary transition-colors">{{
+          category.name }}</h3>
+        <p class="mb-6 text-sm text-slate-500 leading-relaxed line-clamp-2 h-10">{{ category.description || 'No
+          description provided for this category.' }}</p>
 
-          <div class="mt-4 flex items-center justify-between border-t border-slate-100 pt-6">
-            <div class="flex items-center gap-2.5">
-              <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-50 text-slate-400">
-                <lucide-icon [img]="Package" class="h-4 w-4"></lucide-icon>
-              </div>
-              <span class="text-sm font-bold text-slate-700">{{ category.productsCount || 0 }} <span class="font-medium text-slate-400 ml-1">Products</span></span>
+        <div class="mt-4 flex items-center justify-between border-t border-slate-100 pt-6">
+          <div class="flex items-center gap-2.5">
+            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-50 text-slate-400">
+              <lucide-icon [img]="Package" class="h-4 w-4"></lucide-icon>
             </div>
+            <span class="text-sm font-bold text-slate-700">{{ category.productsCount || 0 }} <span
+                class="font-medium text-slate-400 ml-1">Products</span></span>
           </div>
         </div>
+      </div>
       } @empty {
-        <div class="col-span-full py-20 text-center bg-white rounded-[32px] border border-dashed border-slate-300">
-          <div class="flex flex-col items-center gap-4">
-            <div class="h-20 w-20 rounded-full bg-slate-50 flex items-center justify-center text-slate-300">
-              <lucide-icon [img]="FolderPlus" class="h-10 w-10"></lucide-icon>
-            </div>
-            <h3 class="text-xl font-bold text-slate-900">No categories found</h3>
-            <p class="text-slate-500">Get started by creating your first product category.</p>
-            <button (click)="openModal()" class="mt-2 text-primary font-bold hover:underline">Create category now</button>
+      <div class="col-span-full py-20 text-center bg-white rounded-[32px] border border-dashed border-slate-300">
+        <div class="flex flex-col items-center gap-4">
+          <div class="h-20 w-20 rounded-full bg-slate-50 flex items-center justify-center text-slate-300">
+            <lucide-icon [img]="FolderPlus" class="h-10 w-10"></lucide-icon>
           </div>
+          <h3 class="text-xl font-bold text-slate-900">No categories found</h3>
+          <p class="text-slate-500">Get started by creating your first product category.</p>
+          <button (click)="openModal()" class="mt-2 text-primary font-bold hover:underline">Create category now</button>
         </div>
+      </div>
       }
     </div>
 
     <!-- Pagination -->
     @if (totalItems() > 0) {
-      <div class="mt-8 flex items-center justify-between px-2">
-        <span class="text-sm text-slate-500 font-medium">
-          Showing <strong>{{ (currentPage() - 1) * pageSize() + 1 }}</strong> - 
-          <strong>{{ Math.min(currentPage() * pageSize(), totalItems()) }}</strong> of 
-          <strong>{{ totalItems() }}</strong> categories
-        </span>
-        <div class="flex gap-2">
-          <button 
-            [disabled]="currentPage() === 1"
-            (click)="onPageChange(currentPage() - 1)"
-            class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
-            <lucide-icon [img]="ChevronLeft" class="h-4 w-4"></lucide-icon> Previous
-          </button>
-          <button 
-            [disabled]="currentPage() * pageSize() >= totalItems()"
-            (click)="onPageChange(currentPage() + 1)"
-            class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
-            Next <lucide-icon [img]="ChevronRight" class="h-4 w-4"></lucide-icon>
-          </button>
-        </div>
+    <div class="mt-8 flex items-center justify-between px-2">
+      <span class="text-sm text-slate-500 font-medium">
+        Showing <strong>{{ (currentPage() - 1) * pageSize() + 1 }}</strong> -
+        <strong>{{ Math.min(currentPage() * pageSize(), totalItems()) }}</strong> of
+        <strong>{{ totalItems() }}</strong> categories
+      </span>
+      <div class="flex gap-2">
+        <button [disabled]="currentPage() === 1" (click)="onPageChange(currentPage() - 1)"
+          class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
+          <lucide-icon [img]="ChevronLeft" class="h-4 w-4"></lucide-icon> Previous
+        </button>
+        <button [disabled]="currentPage() * pageSize() >= totalItems()" (click)="onPageChange(currentPage() + 1)"
+          class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
+          Next <lucide-icon [img]="ChevronRight" class="h-4 w-4"></lucide-icon>
+        </button>
       </div>
+    </div>
     }
   </div>
 </div>
@@ -91,47 +99,49 @@
 <app-modal [open]="showModal" [title]="modalTitle" (close)="closeModal()">
   <div class="p-1 space-y-8" [formGroup]="categoryForm">
     <app-input label="Category Name *" formControlName="name" placeholder="e.g. Electronics"></app-input>
-    
+
     <div>
       <label class="mb-2 block text-sm font-bold text-slate-700">Description</label>
-      <textarea formControlName="description" rows="3" class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-primary focus:bg-white focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all resize-none text-slate-900" placeholder="Short description of this category"></textarea>
+      <textarea formControlName="description" rows="3"
+        class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-primary focus:bg-white focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all resize-none text-slate-900"
+        placeholder="Short description of this category"></textarea>
     </div>
 
     <div>
       <label class="mb-3 block text-sm font-bold text-slate-700 uppercase tracking-wider">Select Visual Icon</label>
       <div class="grid grid-cols-4 gap-4">
         @for (icon of icons; track icon.name) {
-          <div 
-            class="flex h-14 cursor-pointer items-center justify-center rounded-2xl border-2 transition-all duration-200"
-            [class.border-primary]="categoryForm.get('icon')?.value === icon.name"
-            [class.bg-primary/10]="categoryForm.get('icon')?.value === icon.name"
-            [class.text-primary]="categoryForm.get('icon')?.value === icon.name"
-            [class.scale-105]="categoryForm.get('icon')?.value === icon.name"
-            [class.border-transparent]="categoryForm.get('icon')?.value !== icon.name"
-            [class.bg-slate-50]="categoryForm.get('icon')?.value !== icon.name"
-            [class.text-slate-400]="categoryForm.get('icon')?.value !== icon.name"
-            [class.hover:bg-slate-100]="categoryForm.get('icon')?.value !== icon.name"
-            (click)="categoryForm.patchValue({ icon: icon.name })"
-          >
-            <lucide-icon [img]="icon.img" class="h-6 w-6"></lucide-icon>
-          </div>
+        <div
+          class="flex h-14 cursor-pointer items-center justify-center rounded-2xl border-2 transition-all duration-200"
+          [class.border-primary]="categoryForm.get('icon')?.value === icon.name"
+          [class.bg-primary/10]="categoryForm.get('icon')?.value === icon.name"
+          [class.text-primary]="categoryForm.get('icon')?.value === icon.name"
+          [class.scale-105]="categoryForm.get('icon')?.value === icon.name"
+          [class.border-transparent]="categoryForm.get('icon')?.value !== icon.name"
+          [class.bg-slate-50]="categoryForm.get('icon')?.value !== icon.name"
+          [class.text-slate-400]="categoryForm.get('icon')?.value !== icon.name"
+          [class.hover:bg-slate-100]="categoryForm.get('icon')?.value !== icon.name"
+          (click)="categoryForm.patchValue({ icon: icon.name })">
+          <lucide-icon [img]="icon.img" class="h-6 w-6"></lucide-icon>
+        </div>
         }
       </div>
     </div>
 
     <div class="mt-10 flex justify-end gap-3 border-t border-slate-100 pt-8">
-      <button class="px-6 py-3 rounded-xl border border-slate-200 text-slate-600 font-bold hover:bg-slate-50 transition-all" (click)="closeModal()">Cancel</button>
-      <button class="px-8 py-3 rounded-xl bg-primary text-white font-bold shadow-lg shadow-primary/20 hover:bg-primaryHover transition-all hover:scale-[1.02] active:scale-[0.98]" (click)="saveCategory()">
+      <button
+        class="px-6 py-3 rounded-xl border border-slate-200 text-slate-600 font-bold hover:bg-slate-50 transition-all"
+        (click)="closeModal()">Cancel</button>
+      <button
+        class="px-8 py-3 rounded-xl bg-primary text-white font-bold shadow-lg shadow-primary/20 hover:bg-primaryHover transition-all hover:scale-[1.02] active:scale-[0.98]"
+        (click)="saveCategory()">
         {{ modalAction }}
       </button>
     </div>
   </div>
 </app-modal>
 
-<app-confirm-dialog
-  [open]="showConfirmDialog"
-  title="Delete Category"
+<app-confirm-dialog [open]="showConfirmDialog" title="Delete Category"
   message="Are you sure you want to permanently delete this category? All products within this category will be unassigned."
-  (confirm)="confirmDelete()"
-  (cancel)="cancelDelete()">
+  (confirm)="confirmDelete()" (cancel)="cancelDelete()">
 </app-confirm-dialog>

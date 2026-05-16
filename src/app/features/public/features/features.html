@@ -1,1 +1,30 @@
-<p>features works!</p>
+<app-page-header title="Platform Features" subtitle="Deep overview of architecture, controls, and tenant operations."></app-page-header>
+
+<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+  <app-card title="Tenant Isolation" subtitle="Dedicated boundary per organization">
+    <div class="mt-4 grid grid-cols-1 gap-3 md:grid-cols-3 text-sm">
+      <div class="rounded-xl border border-white/5 bg-white/5 p-3">Tenant A</div>
+      <div class="rounded-xl border border-white/5 bg-white/5 p-3">Tenant B</div>
+      <div class="rounded-xl border border-white/5 bg-white/5 p-3">Tenant C</div>
+    </div>
+  </app-card>
+  <app-card title="Security" subtitle="JWT + role controls + audit-ready flows">
+    <div class="mt-4 flex gap-3 text-sm">
+      <span class="rounded-xl border border-white/5 bg-white/5 px-3 py-2">JWT</span>
+      <span class="rounded-xl border border-white/5 bg-white/5 px-3 py-2">Security</span>
+      <span class="rounded-xl border border-white/5 bg-white/5 px-3 py-2">Provisioning</span>
+    </div>
+  </app-card>
+  <app-card title="Feature Grid" subtitle="Operational capabilities">
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div class="rounded-xl border border-white/5 bg-white/5 p-4"><lucide-icon [img]="Shield"></lucide-icon><p class="mt-2 text-sm">Access Control</p></div>
+      <div class="rounded-xl border border-white/5 bg-white/5 p-4"><lucide-icon [img]="Boxes"></lucide-icon><p class="mt-2 text-sm">Inventory</p></div>
+      <div class="rounded-xl border border-white/5 bg-white/5 p-4"><lucide-icon [img]="Users"></lucide-icon><p class="mt-2 text-sm">Users</p></div>
+      <div class="rounded-xl border border-white/5 bg-white/5 p-4"><lucide-icon [img]="ChartColumn"></lucide-icon><p class="mt-2 text-sm">Analytics</p></div>
+    </div>
+  </app-card>
+  <app-card title="FAQ" subtitle="Common product questions">
+    <details class="rounded-xl border border-white/5 bg-white/5 p-3"><summary>How is data isolated?</summary><p class="mt-2 text-sm text-slate-400">Each request is tenant scoped using X-Tenant-ID and role checks.</p></details>
+    <details class="mt-3 rounded-xl border border-white/5 bg-white/5 p-3"><summary>Can I onboard multiple companies?</summary><p class="mt-2 text-sm text-slate-400">Yes, tenant registration and approval are built for scale.</p></details>
+  </app-card>
+</div>

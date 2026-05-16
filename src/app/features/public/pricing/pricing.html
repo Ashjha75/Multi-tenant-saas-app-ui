@@ -1,1 +1,28 @@
-<p>pricing works!</p>
+<app-page-header title="Pricing" subtitle="Simple plans for teams at every growth stage."></app-page-header>
+
+<div class="mb-6 flex items-center gap-3">
+  <button class="rounded-button border border-white/10 px-4 py-2 text-sm" [class.bg-primary]="!yearly()" (click)="yearly.set(false)">Monthly</button>
+  <button class="rounded-button border border-white/10 px-4 py-2 text-sm" [class.bg-primary]="yearly()" (click)="yearly.set(true)">Yearly</button>
+</div>
+
+<div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+  <article class="rounded-card border border-white/5 bg-card p-6 shadow-xl">
+    <h3 class="font-heading text-lg">Starter</h3>
+    <p class="mt-2 text-3xl font-bold">{{ yearly() ? '$19' : '$29' }}</p>
+    <p class="mt-4 text-sm text-slate-400">5 users · 5k products · basic support</p>
+    <app-button class="mt-6" block="true">Choose Starter</app-button>
+  </article>
+  <article class="rounded-card border border-primary/40 bg-card p-6 shadow-xl xl:col-span-2">
+    <span class="rounded-full bg-primary/20 px-3 py-1 text-xs text-primary">Most Popular</span>
+    <h3 class="mt-3 font-heading text-lg">Business</h3>
+    <p class="mt-2 text-3xl font-bold">{{ yearly() ? '$49' : '$69' }}</p>
+    <p class="mt-4 text-sm text-slate-400">20 users · 50k products · advanced analytics</p>
+    <app-button class="mt-6" block="true">Choose Business</app-button>
+  </article>
+  <article class="rounded-card border border-white/5 bg-card p-6 shadow-xl">
+    <h3 class="font-heading text-lg">Enterprise</h3>
+    <p class="mt-2 text-3xl font-bold">Custom</p>
+    <p class="mt-4 text-sm text-slate-400">Unlimited users · SLA · dedicated support</p>
+    <app-button class="mt-6" block="true" variant="secondary">Contact Sales</app-button>
+  </article>
+</div>

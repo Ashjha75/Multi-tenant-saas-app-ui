@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule, Building2, Download, RefreshCcw, Activity, Shield, Users, Box, HardDrive, Edit, Play, Pause } from 'lucide-angular';
-import { PageHeader } from '../../../shared/components/page-header/page-header';
-import { Button } from '../../../shared/components/button/button';
-import { StatusBadge } from '../../../shared/components/status-badge/status-badge';
-import { KpiCard } from '../../../shared/components/kpi-card/kpi-card';
-import { DataTable } from '../../../shared/components/data-table/data-table';
+import { PageHeader } from '../../../../shared/components/page-header/page-header';
+import { Button } from '../../../../shared/components/button/button';
+import { StatusBadge } from '../../../../shared/components/status-badge/status-badge';
+import { KpiCard } from '../../../../shared/components/kpi-card/kpi-card';
+import { DataTable } from '../../../../shared/components/data-table/data-table';
 
 @Component({
   selector: 'app-tenant-detail',

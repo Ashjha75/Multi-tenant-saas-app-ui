@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideAngularModule, Mail } from 'lucide-angular';
 import { NotificationService } from '../../../core/services/notification.service';
@@ -14,17 +14,15 @@ import { PageHeader } from '../../../shared/components/page-header/page-header';
   styleUrl: './forgot-password.css',
 })
 export class ForgotPassword {
+  private readonly fb = inject(FormBuilder);
+  private readonly notifier = inject(NotificationService);
+
   readonly Mail = Mail;
   readonly modalOpen = signal(false);
 
   readonly form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
   });
-
-  constructor(
-    private readonly fb: FormBuilder,
-    private readonly notifier: NotificationService,
-  ) {}
 
   submit(): void {
     if (this.form.invalid) {

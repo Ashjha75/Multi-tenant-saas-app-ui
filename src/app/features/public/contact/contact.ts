@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgxSkeletonLoaderComponent } from 'ngx-skeleton-loader';
 import { Button } from '../../../shared/components/button/button';
@@ -13,6 +13,9 @@ import { PageHeader } from '../../../shared/components/page-header/page-header';
   styleUrl: './contact.css',
 })
 export class Contact {
+  private readonly fb = inject(FormBuilder);
+  private readonly notifier = inject(NotificationService);
+
   readonly loading = signal(false);
 
   readonly form = this.fb.group({
@@ -21,11 +24,6 @@ export class Contact {
     company: ['', [Validators.required]],
     message: ['', [Validators.required, Validators.minLength(10)]],
   });
-
-  constructor(
-    private readonly fb: FormBuilder,
-    private readonly notifier: NotificationService,
-  ) {}
 
   submit(): void {
     if (this.form.invalid) {

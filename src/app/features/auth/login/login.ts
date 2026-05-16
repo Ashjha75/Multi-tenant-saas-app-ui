@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { LucideAngularModule, Bell, ChartColumn, Package } from 'lucide-angular';
@@ -16,6 +16,10 @@ import { Input } from '../../../shared/components/input/input';
   styleUrl: './login.css',
 })
 export class Login {
+  private readonly fb = inject(FormBuilder);
+  private readonly authService = inject(AuthService);
+  private readonly notifier = inject(NotificationService);
+
   readonly loading = signal(false);
   readonly ChartColumn = ChartColumn;
   readonly Package = Package;
@@ -25,12 +29,6 @@ export class Login {
     username: ['', [Validators.required]],
     password: ['', [Validators.required, Validators.minLength(8)]],
   });
-
-  constructor(
-    private readonly fb: FormBuilder,
-    private readonly authService: AuthService,
-    private readonly notifier: NotificationService,
-  ) {}
 
   submit(): void {
     if (this.form.invalid) {

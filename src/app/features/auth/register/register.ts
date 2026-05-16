@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
@@ -18,6 +18,11 @@ import { StatusBadge } from '../../../shared/components/status-badge/status-badg
   styleUrl: './register.css',
 })
 export class Register {
+  private readonly fb = inject(FormBuilder);
+  private readonly authService = inject(AuthService);
+  private readonly notifier = inject(NotificationService);
+  private readonly router = inject(Router);
+
   readonly step = signal(1);
   readonly loading = signal(false);
 
@@ -65,13 +70,6 @@ export class Register {
     () => this.adminForm.value.adminPassword && this.adminForm.value.adminPassword === this.adminForm.value.confirmPassword,
   );
 
-  constructor(
-    private readonly fb: FormBuilder,
-    private readonly authService: AuthService,
-    private readonly notifier: NotificationService,
-    private readonly router: Router,
-  ) {}
-
   next(): void {
     if (this.step() === 1) {
       if (this.companyForm.invalid) {
@@ -101,7 +99,12 @@ export class Register {
 
   submit(): void {
     const payload = {
-      ...this.companyForm.getRawValue(),
+      companyName: this.companyForm.value.companyName ?? '',
+      companyCode: this.companyForm.value.companyCode ?? '',
+      email: this.companyForm.value.email ?? '',
+      industry: this.companyForm.value.industry ?? '',
+      companySize: this.companyForm.value.companySize ?? '',
+      country: this.companyForm.value.country ?? '',
       adminFullName: this.adminForm.value.adminFullName ?? '',
       adminEmail: this.adminForm.value.adminEmail ?? '',
       adminUsername: this.adminForm.value.adminUsername ?? '',

@@ -1,7 +1,29 @@
-<app-modal [open]="open()" [title]="title()" (close)="onCancel()">
-  <p class="mb-6 text-sm text-slate-600 font-medium">{{ message() }}</p>
-  <div class="flex justify-end gap-3">
-    <button (click)="onCancel()" class="px-6 py-2.5 rounded-button border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 transition-colors">Cancel</button>
-    <app-button variant="danger" (clicked)="onConfirm()">Confirm</app-button>
+<app-modal [open]="show()" [title]="title()" (close)="onCancel()">
+  <p class="mb-8 text-sm text-slate-500 font-medium leading-relaxed">{{ message() }}</p>
+  
+  <div class="flex items-center justify-end gap-3 pt-2">
+    <button 
+      type="button"
+      (click)="onCancel()" 
+      class="px-6 py-3 rounded-2xl border border-slate-200 text-slate-600 text-sm font-bold hover:bg-slate-50 transition-all active:scale-95"
+    >
+      {{ cancelText() }}
+    </button>
+    
+    <button
+      type="button"
+      (click)="onConfirm()"
+      [disabled]="loading()"
+      class="px-6 py-3 rounded-2xl text-sm font-bold text-white transition-all active:scale-95 disabled:opacity-50 flex items-center gap-2"
+      [class.bg-primary]="type() === 'primary'"
+      [class.bg-danger]="type() === 'danger'"
+    >
+      @if (loading()) {
+        <div class="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+        Processing...
+      } @else {
+        {{ confirmText() }}
+      }
+    </button>
   </div>
 </app-modal>

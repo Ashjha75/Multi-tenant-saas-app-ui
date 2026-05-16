@@ -3,4 +3,5 @@ export interface SidebarItem {
   title: string;
   route: string;
   roles?: string[];
+  section?: string;
 }

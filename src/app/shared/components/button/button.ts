@@ -7,6 +7,7 @@ type ButtonSize = 'sm' | 'md' | 'lg';
 
 @Component({
   selector: 'app-button',
+  standalone: true,
   imports: [NgClass],
   templateUrl: './button.html',
   styleUrl: './button.css',

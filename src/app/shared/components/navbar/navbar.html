@@ -1,21 +1,21 @@
-<header class="sticky top-0 z-40 h-[76px] border-b border-white/10 bg-[rgba(10,15,30,.65)] backdrop-blur-[18px]">
+﻿<header class="sticky top-0 z-40 h-[76px] border-b border-slate-200 bg-white/80 backdrop-blur-md">
   <div class="mx-auto flex h-full w-full max-w-[1280px] items-center justify-between px-4 sm:px-6 lg:px-8">
-    <a routerLink="/" class="flex items-center gap-3 text-sm font-semibold tracking-wide text-slate-100">
-      <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[linear-gradient(90deg,#6366F1,#8B5CF6)]">S</span>
+    <a routerLink="/" class="flex items-center gap-3 text-sm font-semibold tracking-wide text-slate-900">
+      <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white">S</span>
       <span class="font-heading text-base">StockFlow</span>
     </a>
 
     @if (isPublic()) {
-      <nav class="hidden items-center gap-6 text-sm text-slate-300 md:flex">
-        <a routerLink="/features" class="hover:text-white">Features</a>
-        <a routerLink="/pricing" class="hover:text-white">Pricing</a>
-        <a routerLink="/about" class="hover:text-white">About</a>
-        <a routerLink="/contact" class="hover:text-white">Contact</a>
-        <a routerLink="/login" class="hover:text-white">Login</a>
-        <a routerLink="/register" class="rounded-button bg-[linear-gradient(90deg,#6366F1,#8B5CF6)] px-4 py-2 font-semibold text-white transition hover:scale-[1.02]">Start Free Trial</a>
+      <nav class="hidden items-center gap-6 text-sm text-slate-600 md:flex">
+        <a routerLink="/features" class="hover:text-primary">Features</a>
+        <a routerLink="/pricing" class="hover:text-primary">Pricing</a>
+        <a routerLink="/about" class="hover:text-primary">About</a>
+        <a routerLink="/contact" class="hover:text-primary">Contact</a>
+        <a routerLink="/login" class="hover:text-primary">Login</a>
+        <a routerLink="/register" class="rounded-button bg-primary px-4 py-2 font-semibold text-white shadow-sm transition hover:-translate-y-[1px] hover:shadow-md hover:shadow-primary/20">Start Free Trial</a>
       </nav>
     } @else {
-      <div class="text-sm text-slate-300">Multi-tenant SaaS Console</div>
+      <div class="text-sm text-slate-500">Multi-tenant SaaS Console</div>
     }
   </div>
 </header>

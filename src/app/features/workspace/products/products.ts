@@ -50,68 +50,42 @@ export class Products implements OnInit {
     { key: 'actions', label: 'Actions' }
   ];
 
+  currentPage = signal(1);
+  pageSize = signal(10);
+  totalItems = signal(0);
+
   data = signal<any[]>([]);
-  categoryOptions = signal<{ value: string; label: string }[]>([{ value: 'all', label: 'All Categories' }]);
+  categoryOptions = signal<{ value: string; label: string }[]>([]);
 
-  filterForm = this.fb.group({
-    search: [''],
-    category: ['all'],
-    priceRange: [''],
-    lowStock: [false]
-  });
-
-  filteredData = computed(() => {
-    const filters = this.filterForm.value;
-    return this.data().filter(item => {
-      let matches = true;
-      if (filters.search) {
-        matches = matches && item.name.toLowerCase().includes(filters.search.toLowerCase());
-      }
-      if (filters.category && filters.category !== 'all') {
-        matches = matches && (item.category?.id === filters.category || item.categoryId === filters.category);
-      }
-      if (filters.lowStock) {
-        matches = matches && (item.stock <= (item.alertThreshold || 5));
-      }
-      if (filters.priceRange) {
-        const [min, max] = filters.priceRange.split('-').map(n => Number(n.trim()));
-        if (!isNaN(min) && item.price < min) matches = false;
-        if (!isNaN(max) && item.price > max) matches = false;
-      }
-      return matches;
-    });
-  });
-
+  // KPIs based on current page data as requested
   totalProducts = computed(() => this.data().length);
-  inventoryValue = computed(() => this.data().reduce((acc, item) => acc + (item.price * (item.stock || 0)), 0));
-  lowStockCount = computed(() => this.data().filter(item => item.stock > 0 && item.stock <= (item.alertThreshold || 5)).length);
-  outOfStockCount = computed(() => this.data().filter(item => item.stock === 0).length);
+  inventoryValue = computed(() => this.data().reduce((acc, item) => acc + (Number(item.price || 0) * (item.stock || 0)), 0));
+  lowStockCount = computed(() => this.data().filter(item => item.stock > 0 && item.stock <= (item.alertThreshold || 10)).length);
+  outOfStockCount = computed(() => this.data().filter(item => (item.stock || 0) === 0).length);
 
   productForm = this.fb.group({
     name: ['', Validators.required],
     reference: ['', Validators.required],
     description: [''],
     price: ['', [Validators.required, Validators.min(0)]],
-    alertThreshold: [''],
-    categoryId: ['', Validators.required]
+    alertThreshold: [10],
+    categoryId: ['', Validators.required],
+    stock: [0]
   });
 
   ngOnInit() {
     this.loadCategories();
     this.loadProducts();
-
-    this.filterForm.valueChanges.subscribe(() => {
-    });
   }
 
   loadCategories() {
     this.categoryService.getCategories(0, 1000).subscribe({
       next: (res) => {
         const categories = res.content || res || [];
-        const options = [{ value: 'all', label: 'All Categories' }, ...categories.map((c: any) => ({
+        const options = categories.map((c: any) => ({
           value: c.id,
           label: c.name
-        }))];
+        }));
         this.categoryOptions.set(options);
       }
     });
@@ -119,14 +93,22 @@ export class Products implements OnInit {
 
   loadProducts() {
     this.isLoading = true;
-    this.productService.getProducts().pipe(
+    // Using current pagination
+    this.productService.getProducts(this.currentPage() - 1, this.pageSize()).pipe(
       finalize(() => this.isLoading = false)
     ).subscribe({
       next: (res) => {
-        this.data.set(res.content || res || []);
+        const items = res.content || res || [];
+        this.data.set(items);
+        this.totalItems.set(res.totalElements || items.length);
       },
       error: () => this.notifier.error('Failed to load products')
     });
+  }
+
+  onPageChange(page: number) {
+    this.currentPage.set(page);
+    this.loadProducts();
   }
 
   openModal() {

@@ -1,9 +1,11 @@
 @if (open()) {
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm" (click)="onClose()">
     <section class="w-full max-w-xl rounded-modal border border-soft bg-card p-6 shadow-modal" (click)="$event.stopPropagation()">
-      <header class="mb-4 flex items-center justify-between">
-        <h3 class="font-heading text-lg font-semibold">{{ title() }}</h3>
-        <button class="rounded-lg px-2 py-1 text-slate-300 hover:bg-white/10" (click)="onClose()">x</button>
+      <header class="mb-4 flex items-center justify-between border-b border-slate-100 pb-4">
+        <h3 class="font-heading text-xl font-bold text-slate-900">{{ title() }}</h3>
+        <button class="rounded-xl p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-all" (click)="onClose()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
       </header>
       <ng-content></ng-content>
     </section>
